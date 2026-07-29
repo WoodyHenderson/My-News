@@ -4,6 +4,7 @@ import typer
 from pathlib import Path
 from typing import Annotated, Optional
 from shutil import copyfile
+import yaml
 
 app = typer.Typer(
     name="mycli",
@@ -57,10 +58,19 @@ def validate(
     Validate the configuration file.
     """
     if not config.exists():
-        typer.echo(f"Configuration file {config} does not exist.")
+        typer.echo(f"Configuration file {config} does not exist, try running 'mycli init' to create one.")
         raise typer.Exit(code=1)
 
-    # Here you would add your validation logic for the configuration file
-    # For demonstration purposes, we'll just print a success message
-    typer.echo(f"Configuration file {config} is valid."
-)
+    with open(config) as f:
+        try:
+            config_data = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            typer.echo(f"Configuration file {config} is not valid YAML. Error: {e}")
+            raise typer.Exit(code=1)
+
+        # Ideally each YAML config file should have at least a 'sources' key at the top level
+        f.seek(0)
+        if 'sources' not in config_data:
+            typer.echo(f"Configuration file {config} is missing the 'sources' key.")
+            raise typer.Exit(code=1)
+
