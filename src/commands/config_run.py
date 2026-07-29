@@ -59,3 +59,4 @@ def run_application(
     urls = config_data.get("url", []) 
     article_data = fetch_articles(urls)
     
+    

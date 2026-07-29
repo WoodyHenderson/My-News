@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 from src.commands.config_init import ConfigInitError, initialize_config
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
+from src.fetch_articles import fetch_articles
 
 """ CLI that we will use for interacting with the app. """
 
@@ -62,5 +63,4 @@ def run(
     except ConfigValidationError as e:
         typer.echo(str(e))
         raise typer.Exit(code=1)
-
     
