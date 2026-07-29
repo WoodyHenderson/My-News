@@ -4,6 +4,7 @@ from pathlib import Path
 
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
 from fetch_articles import fetch_articles, ArticleContent
+from normalise import normalise_validate_articles
 
 '''
 What run should include:
@@ -58,5 +59,7 @@ def run_application(
     # Lets start by gathering all the sources from the configuration file
     urls = config_data.get("url", []) 
     article_data = fetch_articles(urls)
+    article_data = normalise_validate_articles(article_data)
     
+
     
