@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
+from fetch_articles import fetch_articles, ArticleContent
 
 '''
 What run should include:
@@ -56,6 +57,5 @@ def run_application(
 
     # Lets start by gathering all the sources from the configuration file
     urls = config_data.get("url", []) 
-    for url in urls:
-        
+    article_data = fetch_articles(urls)
     

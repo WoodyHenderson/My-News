@@ -1,3 +1,13 @@
-When starting the project in development phase we are using Python 3.12 to change python to use 3.12 in the project use
+When starting development, this project uses Python 3.12.
+
+Windows (PowerShell):
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+Windows (cmd.exe):
+py -3.12 -m venv .venv
+.\.venv\Scripts\activate.bat
+
+macOS/Linux:
 python3.12 -m venv .venv
 source .venv/bin/activate

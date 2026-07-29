@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import feedparser
 
 @dataclass
 class ArticleContent:
