@@ -1,5 +1,6 @@
-# Example YAML configuration file 
-# NOTE TO SELF: (remember to keep updated to reflect what is supported)
+# Example YAML configuration file.
+# Keep this file updated to reflect supported configuration fields and adapters.
+# Don't fancy messing with YAML so Copilot generated this, tweak values as you like.
 version: 1
 
 digest:
@@ -26,53 +27,311 @@ network:
   max_article_fetches_per_source: 20
 
 interests:
+  # The planned ranker requires a positive term match. This low-weight interest
+  # admits broadly important stories without overpowering specific interests.
+  - id: "general-news"
+    label: "Major general news"
+    weight: 0.25
+    phrases:
+      "breaking news": 1.5
+      "live updates": 1.5
+      "prime minister": 1.0
+      "head of state": 1.0
+      "supreme court": 1.0
+    terms:
+      "breaking": 1.0
+      "live": 1.0
+      "world": 1.0
+      "international": 1.0
+      "government": 1.0
+      "politics": 1.0
+      "election": 1.0
+      "war": 1.0
+      "conflict": 1.0
+      "crisis": 1.0
+      "security": 1.0
+      "economy": 1.0
+      "markets": 1.0
+      "business": 1.0
+      "technology": 1.0
+      "science": 1.0
+      "health": 1.0
+      "climate": 1.0
+      "crime": 1.0
+      "court": 1.0
+    required_any: []
+    excluded: []
+
+  - id: "gaming"
+    label: "Video games and the games industry"
+    weight: 3.0
+    phrases:
+      "video game": 3.0
+      "video games": 3.0
+      "games industry": 2.5
+      "gaming industry": 2.5
+      "game developer": 2.5
+      "game development": 2.5
+      "game studio": 2.5
+      "gaming console": 2.0
+      "game release": 2.0
+    terms:
+      "gaming": 3.0
+      "videogame": 3.0
+      "esports": 2.5
+      "PlayStation": 2.0
+      "Xbox": 2.0
+      "Valve": 3.0
+      "Ubisoft": 1.5
+      "CD Projekt": 2.5
+      "Rockstar": 2.5
+      "Steam": 3.0
+    required_any: []
+    excluded: []
+
   - id: "ai"
     label: "Artificial intelligence"
-    weight: 2.0
+    weight: 0.5
     phrases:
-      "artificial intelligence": 3.0
-      "large language model": 3.0
-      "machine learning": 2.0
+      "artificial intelligence": 2.0
+      "generative AI": 2.0
+      "large language model": 2.0
+      "machine learning": 1.5
+      "deep learning": 1.5
     terms:
-      "AI": 1.5
-      "LLM": 1.5
-      "inference": 1.0
-    required_any: []
-    excluded:
-      - "football prediction"
-
-  - id: "cybersecurity"
-    label: "Cybersecurity"
-    weight: 1.5
-    phrases:
-      "zero-day": 3.0
-      "data breach": 2.5
-    terms:
-      "ransomware": 2.0
-      "vulnerability": 1.5
+      "AI": 1.0
+      "LLM": 1.0
+      "ChatGPT": 1.0
+      "OpenAI": 1.0
+      "Anthropic": 1.0
+      "Gemini": 1.0
     required_any: []
     excluded: []
 
 sources:
-  - id: "example-technology"
-    name: "Example News - Technology"
+  # BBC publishes separate RSS feeds for each requested section.
+  - id: "bbc-front-page"
+    name: "BBC News - Front Page"
     enabled: true
     kind: "feed"
-    url: "https://example.com/technology/feed.xml"
-    site_url: "https://example.com"
-    priority_boost: 0.2
+    url: "https://feeds.bbci.co.uk/news/rss.xml"
+    site_url: "https://www.bbc.co.uk/news"
+    priority_boost: 0.5
     interests:
+      - "general-news"
+      - "gaming"
       - "ai"
-      - "cybersecurity"
     fetch_article: "auto"
 
-  - id: "example-html-source"
-    name: "Example Journal"
+  - id: "bbc-technology"
+    name: "BBC News - Technology"
+    enabled: true
+    kind: "feed"
+    url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
+    site_url: "https://www.bbc.co.uk/news/technology"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  - id: "bbc-business"
+    name: "BBC News - Business"
+    enabled: true
+    kind: "feed"
+    url: "https://feeds.bbci.co.uk/news/business/rss.xml"
+    site_url: "https://www.bbc.co.uk/news/business"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  - id: "bbc-politics"
+    name: "BBC News - Politics"
+    enabled: true
+    kind: "feed"
+    url: "https://feeds.bbci.co.uk/news/politics/rss.xml"
+    site_url: "https://www.bbc.co.uk/news/politics"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  # The Guardian also publishes separate RSS feeds for each requested section.
+  - id: "guardian-front-page"
+    name: "The Guardian - Front Page"
+    enabled: true
+    kind: "feed"
+    url: "https://www.theguardian.com/international/rss"
+    site_url: "https://www.theguardian.com/international"
+    priority_boost: 0.5
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  - id: "guardian-technology"
+    name: "The Guardian - Technology"
+    enabled: true
+    kind: "feed"
+    url: "https://www.theguardian.com/uk/technology/rss"
+    site_url: "https://www.theguardian.com/uk/technology"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  - id: "guardian-business"
+    name: "The Guardian - Business"
+    enabled: true
+    kind: "feed"
+    url: "https://www.theguardian.com/uk/business/rss"
+    site_url: "https://www.theguardian.com/uk/business"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  - id: "guardian-politics"
+    name: "The Guardian - Politics"
+    enabled: true
+    kind: "feed"
+    url: "https://www.theguardian.com/politics/rss"
+    site_url: "https://www.theguardian.com/politics"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  # ProPublica's main RSS feed contains mixed-category investigations. Its
+  # guessed technology, business, and politics feed URLs return 404 responses.
+  - id: "propublica-latest"
+    name: "ProPublica - Latest Investigations"
+    enabled: true
+    kind: "feed"
+    url: "https://www.propublica.org/feeds/propublica/main"
+    site_url: "https://www.propublica.org"
+    priority_boost: 0.3
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
+
+  # AP and Reuters expose these sections as HTML pages rather than verified
+  # feeds. Keep them disabled until the corresponding adapters are implemented.
+  - id: "ap-front-page"
+    name: "Associated Press - Front Page"
     enabled: false
     kind: "html"
-    url: "https://example.org/latest"
-    adapter: "example_journal"
-    priority_boost: 0.0
+    url: "https://apnews.com/"
+    adapter: "associated_press"
+    priority_boost: 0.5
     interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "ap-technology"
+    name: "Associated Press - Technology"
+    enabled: false
+    kind: "html"
+    url: "https://apnews.com/technology"
+    adapter: "associated_press"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "ap-business"
+    name: "Associated Press - Business"
+    enabled: false
+    kind: "html"
+    url: "https://apnews.com/business"
+    adapter: "associated_press"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "ap-politics"
+    name: "Associated Press - Politics"
+    enabled: false
+    kind: "html"
+    url: "https://apnews.com/politics"
+    adapter: "associated_press"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "reuters-front-page"
+    name: "Reuters - Front Page"
+    enabled: false
+    kind: "html"
+    url: "https://www.reuters.com/"
+    adapter: "reuters"
+    priority_boost: 0.5
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "reuters-technology"
+    name: "Reuters - Technology"
+    enabled: false
+    kind: "html"
+    url: "https://www.reuters.com/technology/"
+    adapter: "reuters"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "reuters-business"
+    name: "Reuters - Business"
+    enabled: false
+    kind: "html"
+    url: "https://www.reuters.com/business/"
+    adapter: "reuters"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "never"
+
+  - id: "reuters-politics"
+    name: "Reuters - Politics and World"
+    enabled: false
+    kind: "html"
+    url: "https://www.reuters.com/world/"
+    adapter: "reuters"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
       - "ai"
     fetch_article: "never"
