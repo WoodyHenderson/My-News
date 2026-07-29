@@ -1,0 +1,78 @@
+# Example YAML configuration file 
+# NOTE TO SELF: (remember to keep updated to reflect what is supported)
+version: 1
+
+digest:
+  title: "My News"
+  timezone: "Europe/London"
+  lookback_hours: 48
+  max_articles: 30
+  minimum_score: 1.0
+  repeat_window_days: 7
+  output_directory: "output"
+  filename: "my-news-{date}.pdf"
+  show_match_reasons: true
+  show_visible_urls: false
+  show_access_warnings: true
+  restricted_badge_text: "PAYWALLED/RESTRICTED"
+
+network:
+  user_agent: "MyNews/0.1 (personal news digest)"
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 20
+  requests_per_host_per_second: 0.5
+  max_retries: 2
+  max_response_bytes: 5000000
+  max_article_fetches_per_source: 20
+
+interests:
+  - id: "ai"
+    label: "Artificial intelligence"
+    weight: 2.0
+    phrases:
+      "artificial intelligence": 3.0
+      "large language model": 3.0
+      "machine learning": 2.0
+    terms:
+      "AI": 1.5
+      "LLM": 1.5
+      "inference": 1.0
+    required_any: []
+    excluded:
+      - "football prediction"
+
+  - id: "cybersecurity"
+    label: "Cybersecurity"
+    weight: 1.5
+    phrases:
+      "zero-day": 3.0
+      "data breach": 2.5
+    terms:
+      "ransomware": 2.0
+      "vulnerability": 1.5
+    required_any: []
+    excluded: []
+
+sources:
+  - id: "example-technology"
+    name: "Example News - Technology"
+    enabled: true
+    kind: "feed"
+    url: "https://example.com/technology/feed.xml"
+    site_url: "https://example.com"
+    priority_boost: 0.2
+    interests:
+      - "ai"
+      - "cybersecurity"
+    fetch_article: "auto"
+
+  - id: "example-html-source"
+    name: "Example Journal"
+    enabled: false
+    kind: "html"
+    url: "https://example.org/latest"
+    adapter: "example_journal"
+    priority_boost: 0.0
+    interests:
+      - "ai"
+    fetch_article: "never"
