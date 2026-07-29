@@ -230,108 +230,108 @@ sources:
       - "ai"
     fetch_article: "auto"
 
-  # AP and Reuters expose these sections as HTML pages rather than verified
-  # feeds. Keep them disabled until the corresponding adapters are implemented.
+  # Since AP and Reuters dont actually have RSS feeds for their pages, (AP requires an API key idk about Reuters)
+  # We just use RSSHub to get the feeds for them instead.
   - id: "ap-front-page"
     name: "Associated Press - Front Page"
-    enabled: false
-    kind: "html"
-    url: "https://apnews.com/"
-    adapter: 
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/apnews/rss/index"
+    site_url: "https://apnews.com/"
     priority_boost: 0.5
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "ap-technology"
     name: "Associated Press - Technology"
-    enabled: false
-    kind: "html"
-    url: "https://apnews.com/technology"
-    adapter: "associated_press"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/apnews/rss/technology"
+    site_url: "https://apnews.com/technology"
     priority_boost: 0.1
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "ap-business"
     name: "Associated Press - Business"
-    enabled: false
-    kind: "html"
-    url: "https://apnews.com/business"
-    adapter: "associated_press"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/apnews/rss/business"
+    site_url: "https://apnews.com/business"
     priority_boost: 0.1
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "ap-politics"
     name: "Associated Press - Politics"
-    enabled: false
-    kind: "html"
-    url: "https://apnews.com/politics"
-    adapter: "associated_press"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/apnews/topics/politics"
+    site_url: "https://apnews.com/politics"
     priority_boost: 0.1
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "reuters-front-page"
     name: "Reuters - Front Page"
-    enabled: false
-    kind: "html"
-    url: "https://www.reuters.com/"
-    adapter: "reuters"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/reuters/world"
+    site_url: "https://www.reuters.com/"
     priority_boost: 0.5
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "reuters-technology"
     name: "Reuters - Technology"
-    enabled: false
-    kind: "html"
-    url: "https://www.reuters.com/technology/"
-    adapter: "reuters"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/reuters/technology"
+    site_url: "https://www.reuters.com/technology/"
     priority_boost: 0.1
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "reuters-business"
     name: "Reuters - Business"
-    enabled: false
-    kind: "html"
-    url: "https://www.reuters.com/business/"
-    adapter: "reuters"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/reuters/business"
+    site_url: "https://www.reuters.com/business/"
     priority_boost: 0.1
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"
 
   - id: "reuters-politics"
     name: "Reuters - Politics and World"
-    enabled: false
-    kind: "html"
-    url: "https://www.reuters.com/world/"
-    adapter: "reuters"
+    enabled: true
+    kind: "feed"
+    url: "https://rsshub.app/reuters/world"
+    site_url: "https://www.reuters.com/world/"
     priority_boost: 0.1
     interests:
       - "general-news"
       - "gaming"
       - "ai"
-    fetch_article: "never"
+    fetch_article: "auto"

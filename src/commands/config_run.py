@@ -55,5 +55,7 @@ def run_application(
         raise ConfigRunError(f"Configuration validation failed: {e}") from e
 
     # Lets start by gathering all the sources from the configuration file
-    sources = config_data.get("sources", [])
+    urls = config_data.get("url", []) 
+    for url in urls:
+        
     
