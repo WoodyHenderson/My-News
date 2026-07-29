@@ -7,6 +7,8 @@ from typing import Annotated, Optional
 from src.commands.config_init import ConfigInitError, initialize_config
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
 
+""" CLI that we will use for interacting with the app. """
+
 app = typer.Typer(
     name="mycli",
     help="A simple CLI application built with Typer.",
