@@ -33,11 +33,9 @@ interests:
     label: "Major general news"
     weight: 0.25
     phrases:
-      "breaking news": 1.5
+      "breaking news": 3.5
       "live updates": 1.5
-      "prime minister": 1.0
-      "head of state": 1.0
-      "supreme court": 1.0
+      "prime minister": 2.5
     terms:
       "breaking": 1.0
       "live": 1.0
