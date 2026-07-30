@@ -1,4 +1,4 @@
-from fetch_articles import ArticleContent
+from src.models.article_content import ArticleContent
 
 def normalise_validate_articles(articles: dict[str, ArticleContent]) -> dict[str, ArticleContent]:
     """

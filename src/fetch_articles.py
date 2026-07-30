@@ -1,11 +1,15 @@
-from dataclasses import dataclass
 import feedparser
 import trafilatura
 
-@dataclass
-class ArticleContent:
-    header: str
-    body: str
+from src.models.article_content import ArticleContent
+
+"""
+Ok so one problem we're running into is the variance in how some places store their RSS, the summary can sometimes be a summary 
+and sometimes it can be the full article or not exist at all, so we need to account for this too.
+The way we do this is by checking if summary exists, if it does we will use it whether or not its the full article or
+just an actual summary, doesn't really matter. But if it doesn't exist we will try and extract the full article body and
+normalise that, then upload it to the database.
+"""
 
 def _fetch_body_from_url(url: str) -> str:
     """Fallback: fetch and extract article body directly from the article page."""
@@ -22,8 +26,9 @@ def fetch_articles(urls: list[str]) -> dict[str, ArticleContent]:
         feed = feedparser.parse(url)
         if feed.entries:
             entry = feed.entries[0]
-            header = entry.get("title", "")
-            body = entry.get("summary", "")
+            header = entry.title.strip()
+            # if summary exists, use it as the body otherwise try and fetch the body from the article page
+            body = entry.get("summary", "").strip()
             if not body and entry.get("link"):
                 body = _fetch_body_from_url(entry.link)
             articles[url] = ArticleContent(header=header, body=body)

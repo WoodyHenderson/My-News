@@ -15,7 +15,7 @@ for entry in parser.entries:
 '''
 
 parser = feedparser.parse(example_feed2)
-unallowed_chars = ['â', '€', '™', '’', '“', '”', '–']
+unallowed_chars = ['â', '€', '™', '’', '“', '”', '–', '<p>']
 for entry in parser.entries:
     print(entry)
     title = entry.title

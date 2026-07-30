@@ -34,8 +34,9 @@ def init (
         for message in messages:
             typer.echo(message)
     except ConfigInitError as e:
-        typer.echo(str(e))
+        typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
+    typer.secho(f"Configuration file {config} initialized successfully.", fg="green")
 
 @app.command()
 def validate(
@@ -47,8 +48,9 @@ def validate(
     try:
         load_and_validate_config(config)
     except ConfigValidationError as e:
-        typer.echo(str(e))
+        typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
+    typer.secho(f"Configuration file {config} is valid.", fg="green")
 
 @app.command()
 def run(
@@ -61,6 +63,6 @@ def run(
     try:
         config_data = load_and_validate_config(config)
     except ConfigValidationError as e:
-        typer.echo(str(e))
+        typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
-    
+    typer.secho(f"Configuration file {config} loaded successfully.", fg="green")

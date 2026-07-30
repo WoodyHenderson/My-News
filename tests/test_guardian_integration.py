@@ -8,6 +8,7 @@ import truststore
 truststore.inject_into_ssl()
 
 GUARDIAN_RSS_URL = "https://www.theguardian.com/uk/rss"
+BBC_RSS_URL = "https://feeds.bbci.co.uk/news/rss.xml"
 
 
 def test_guardian_feed_parse_and_extract(capsys):
@@ -16,6 +17,30 @@ def test_guardian_feed_parse_and_extract(capsys):
     feed = feedparser.parse(response.text)
 
     assert feed.entries, "Guardian RSS feed returned no entries — check URL or network"
+
+    with capsys.disabled():
+        for entry in feed.entries[:3]:  # limit to first 3 to keep test fast
+            title = entry.get("title", "(no title)")
+            summary = entry.get("summary", "")
+            link = entry.get("link", "")
+
+            if not summary and link:
+                downloaded = trafilatura.fetch_url(link)
+                if downloaded:
+                    summary = trafilatura.extract(downloaded) or ""
+
+            print(f"\n--- {title} ---")
+            print(f"URL:  {link}")
+            print(f"Body: {summary[:300]}{'...' if len(summary) > 300 else ''}")
+
+        print(f"\n\nParsed {len(feed.entries)} entries from Guardian RSS.")
+
+def test_bbc_feed_parse_and_extract(capsys):
+    response = requests.get(BBC_RSS_URL, timeout=15)
+    response.raise_for_status()
+    feed = feedparser.parse(response.text)
+
+    assert feed.entries, "BBC RSS feed returned no entries — check URL or network"
 
     for entry in feed.entries[:3]:  # limit to first 3 to keep test fast
         title = entry.get("title", "(no title)")
@@ -32,4 +57,4 @@ def test_guardian_feed_parse_and_extract(capsys):
         print(f"Body: {summary[:300]}{'...' if len(summary) > 300 else ''}")
 
     with capsys.disabled():
-        print(f"\n\nParsed {len(feed.entries)} entries from Guardian RSS.")
+        print(f"\n\nParsed {len(feed.entries)} entries from BBC RSS.")

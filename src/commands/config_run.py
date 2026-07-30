@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+import typer
 
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
-from fetch_articles import fetch_articles, ArticleContent
-from normalise import normalise_validate_articles
+from src.fetch_articles import fetch_articles
+from src.models.article_content import ArticleContent
+from src.normalise import normalise_validate_articles
 
 '''
 What run should include:
@@ -52,14 +54,29 @@ def run_application(
     Run the application with the specified configuration file and output path.
     """
     try:
+        typer.echo("Loading and validating configuration...")
         config_data = load_and_validate_config(config_path)
+        typer.secho("Configuration validated successfully", fg="green")
     except ConfigValidationError as e:
+        typer.secho(f"Configuration validation failed: {e}", fg="red")
         raise ConfigRunError(f"Configuration validation failed: {e}") from e
 
     # Lets start by gathering all the sources from the configuration file
-    urls = config_data.get("url", []) 
-    article_data = fetch_articles(urls)
-    article_data = normalise_validate_articles(article_data)
+    urls = config_data.get("url", [])
+    try:
+        typer.echo(f"Fetching articles from {len(urls)} sources...")
+        article_data = fetch_articles(urls)
+        typer.secho(f"Successfully fetched {len(article_data)} articles", fg="green")
+    except Exception as e:
+        typer.secho(f"Failed to fetch articles: {e}", fg="red")
+        raise ConfigRunError(f"Failed to fetch articles: {e}") from e
+    try:
+        typer.echo(f"Normalising and validating {len(article_data)} articles...")
+        article_data = normalise_validate_articles(article_data)
+        typer.secho(f"Successfully normalised {len(article_data)} articles", fg="green")
+    except Exception as e:
+        typer.secho(f"Failed to normalise and validate articles: {e}", fg="red")
+        raise ConfigRunError(f"Failed to normalise and validate articles: {e}") from e
     
 
     
