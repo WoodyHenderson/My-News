@@ -22,27 +22,19 @@ def rank_articles(
 
 def score_article(article: ArticleContent, config_path: Path = _DEFAULT_CONFIG) -> tuple[float, list[str]]:
     """
-    Our YAML config weighs interests, e.g. each source (every url) has a corresponding priority boost,
-    this is mostly weighted towards the front page of each as since these are quite generalised its 
-    hard to catch important things with the specific interests.
-    Then we have interests which will make up the majority of our scoring, e.g. if an article
-    has a phrase or term that is in the config we add the weight (we will also do some normalisation)
-    e.g. diminishing returns for repeated phrases, we will also bias towards the header, so if a header
-    has a phrase or term that is in the config we will add more weight than if it was in the body.
-    We will also have to normalise for the length of the article, e.g. if an article is 10,000 words long 
-    and has a phrase in it once, it should be less important than if an article is 100 words long and has the 
-    same phrase in it once. The priority boost will be a multiplier at the end.
+    We are going to use a slightly bastardised version of the BM25 algorithm to score 
+    articles based on the interests we have defined in our configuration file.
+    BM25 formula: score = sum((IDF * (k + 1) * tf) / (tf + k * (1 - b + b * (dl / avgdl)))) for each term in the query
+    where:
+        IDF = log((N - n + 0.5) / (n + 0.5) + 1) not Israel Defence Force
+        N = total number of documents
+        n = number of documents containing the term
+        tf = term frequency in the document
+        dl = document length
+        avgdl = average document length
+        k and b are parameters we can tinker with but they are usually 
+        chosen as k=1.2 and b=0.6, which we will use here.
+    Then, once thats done we apply priority boost and recency bonus to the score.
     """
-    with open(config_path, "r", encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-    interests = config.get("interests", [])
-    diminished_values = [1, 0.5, 0.25]
-    matched_interests = []
-    score = 0.0
-    for word in article.header:
-        for interest in interests:
-            count = article.header.count(interest)
-            if count > 0:
-                matched_interests.append(interest)
-                score += 
-        
+
+    
