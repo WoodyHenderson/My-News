@@ -8,7 +8,7 @@ def normalise_validate_articles(articles: dict[str, ArticleContent]) -> dict[str
     """
 
     normalised_articles = {}
-    disallowed_chars = ['â', '€', '™', '’', '“', '”', '–']
+    disallowed_chars = ['â', '€', '™', '’', '“', '”', '–', '<p>']
     for url in articles:
         article = articles[url]
         header = article.header.strip()
