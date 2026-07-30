@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import feedparser
 import trafilatura
 
@@ -19,6 +21,14 @@ def _fetch_body_from_url(url: str) -> str:
     extracted = trafilatura.extract(downloaded)
     return extracted or ""
 
+
+def _get_published_at(entry: feedparser.FeedParserDict) -> datetime | None:
+    published = entry.get("published_parsed") or entry.get("updated_parsed")
+    if published is None:
+        return None
+    return datetime(*published[:6], tzinfo=timezone.utc)
+
+
 def fetch_articles(urls: list[str]) -> dict[str, ArticleContent]:
     """Here we go to each URL and fetch the RSS and give it back to the user as a dictionary with key url and value as ArticleContent"""
     articles = {}
@@ -26,13 +36,23 @@ def fetch_articles(urls: list[str]) -> dict[str, ArticleContent]:
         feed = feedparser.parse(url)
         if feed.entries:
             entry = feed.entries[0]
-            header = entry.title.strip()
+            title = entry.title.strip()
             # if summary exists, use it as the body otherwise try and fetch the body from the article page
             body = entry.get("summary", "").strip()
             if not body and entry.get("link"):
                 body = _fetch_body_from_url(entry.link)
-            articles[url] = ArticleContent(header=header, body=body)
+            articles[url] = ArticleContent(
+                title=title,
+                body=body,
+                source_id=url,
+                published_at=_get_published_at(entry),
+            )
         else:
-            articles[url] = ArticleContent(header="No entries found", body="")
+            articles[url] = ArticleContent(
+                title="No entries found",
+                body="",
+                source_id=url,
+                published_at=None,
+            )
     return articles
 

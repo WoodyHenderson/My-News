@@ -37,4 +37,3 @@ def score_article(article: ArticleContent, config_path: Path = _DEFAULT_CONFIG) 
     Then, once thats done we apply priority boost and recency bonus to the score.
     """
 
-    
