@@ -3,7 +3,8 @@ from src.models.article_content import ArticleContent
 
 def _bm25_tf(tf: int, dl: int, avgdl: float, k: float = 1.2, b: float = 0.6) -> float:
     """
-    Calculate the BM25 term frequency score for a term in a document.
+    Calculate the BM25 term frequency score for a term in a document, check 
+    RANK_ALGO_PLAN.md for more information.
     """
     if avgdl == 0:
         return float(tf) # Don't divide by 0
@@ -20,5 +21,5 @@ def calculate_average_doclength(articles: dict[str, ArticleContent]) -> tuple[fl
     article_count = len(articles)
     average_titles_length = sum(titles) / article_count
     average_bodies_length = sum(bodies) / article_count
-
+    
     return average_titles_length, average_bodies_length

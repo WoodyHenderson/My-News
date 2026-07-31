@@ -1,5 +1,7 @@
 # My News: Detailed Implementation Plan
 
+THIS WAS A PRELIMINARY PLAN USED TO GET THE GENERAL IDEA OF THE PROJECT AND TO START PROGRESSING, IT HAS NOT BEEN UPDATED WITH THE CHANGES I HAVE CHOSEN TO MAKE / THE DIRECTION I DECIDED TO GO.
+
 ## 1. Purpose
 
 Build a local, headless command-line application that collects recent articles from an explicit allowlist of trusted news providers, ranks them against personal interests, and generates a compact PDF digest.

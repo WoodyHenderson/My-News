@@ -224,8 +224,6 @@ sources:
     priority_boost: 0.3
     interests:
       - "general-news"
-      - "gaming"
-      - "ai"
     fetch_article: "auto"
 
   # Since AP and Reuters dont actually have RSS feeds for their pages, (AP requires an API key idk about Reuters)
@@ -239,47 +237,6 @@ sources:
     priority_boost: 0.5
     interests:
       - "general-news"
-      - "gaming"
-      - "ai"
-    fetch_article: "auto"
-
-  - id: "ap-technology"
-    name: "Associated Press - Technology"
-    enabled: true
-    kind: "feed"
-    url: "https://rsshub.app/apnews/rss/technology"
-    site_url: "https://apnews.com/technology"
-    priority_boost: 0.1
-    interests:
-      - "general-news"
-      - "gaming"
-      - "ai"
-    fetch_article: "auto"
-
-  - id: "ap-business"
-    name: "Associated Press - Business"
-    enabled: true
-    kind: "feed"
-    url: "https://rsshub.app/apnews/rss/business"
-    site_url: "https://apnews.com/business"
-    priority_boost: 0.1
-    interests:
-      - "general-news"
-      - "gaming"
-      - "ai"
-    fetch_article: "auto"
-
-  - id: "ap-politics"
-    name: "Associated Press - Politics"
-    enabled: true
-    kind: "feed"
-    url: "https://rsshub.app/apnews/topics/politics"
-    site_url: "https://apnews.com/politics"
-    priority_boost: 0.1
-    interests:
-      - "general-news"
-      - "gaming"
-      - "ai"
     fetch_article: "auto"
 
   - id: "reuters-front-page"
@@ -291,45 +248,5 @@ sources:
     priority_boost: 0.5
     interests:
       - "general-news"
-      - "gaming"
-      - "ai"
     fetch_article: "auto"
 
-  - id: "reuters-technology"
-    name: "Reuters - Technology"
-    enabled: true
-    kind: "feed"
-    url: "https://rsshub.app/reuters/technology"
-    site_url: "https://www.reuters.com/technology/"
-    priority_boost: 0.1
-    interests:
-      - "general-news"
-      - "gaming"
-      - "ai"
-    fetch_article: "auto"
-
-  - id: "reuters-business"
-    name: "Reuters - Business"
-    enabled: true
-    kind: "feed"
-    url: "https://rsshub.app/reuters/business"
-    site_url: "https://www.reuters.com/business/"
-    priority_boost: 0.1
-    interests:
-      - "general-news"
-      - "gaming"
-      - "ai"
-    fetch_article: "auto"
-
-  - id: "reuters-politics"
-    name: "Reuters - Politics and World"
-    enabled: true
-    kind: "feed"
-    url: "https://rsshub.app/reuters/world"
-    site_url: "https://www.reuters.com/world/"
-    priority_boost: 0.1
-    interests:
-      - "general-news"
-      - "gaming"
-      - "ai"
-    fetch_article: "auto"

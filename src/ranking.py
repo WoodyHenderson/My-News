@@ -28,22 +28,25 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
     """
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
-    score = 0.0
+
+    interests_by_id = {interest["id"]: interest for interest in config.get("interests", [])}
+    sources_by_id = {source["id"]: source for source in config.get("sources", [])}
 
     avgdl = calculate_average_doclength(articles)
     avg_title_length, avg_body_length = avgdl
 
     ranked_articles = {}
     for url, article in articles.items():
-        matched_interests = []
+        score = 0.0
         title = normalise_for_matching(article.title)
         body = normalise_for_matching(article.body)
-        score = 0.0
-        for interest_id, interest in config["interests"].items():
+        title_length = len(title.split())
+        body_length = len(body.split())
+        matched_interests = []
+        for interest_id in sources_by_id.get(article.source_id, {}).get("interests", []):
+            interest = interests_by_id.get(interest_id)
             interest_score = 0.0
-            phrase_spans = []
-            for phrase, weight in interest.get("phrases", {}).items():
-                phrase = normalise_for_matching(phrase)
-                phrase_title_count = title.count(phrase)
-                phrase_body_count = body.count(phrase)
+            title_phrase_spans = []
+            body_phrase_spans = []
+            for phrase in interest:
                 
