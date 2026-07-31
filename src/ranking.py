@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 import re
 import yaml
@@ -10,6 +11,16 @@ from normalise import normalise_for_matching
 from calculations import _bm25_tf, calculate_average_doclength
 
 _DEFAULT_CONFIG = Path("config/config.yaml")
+
+def overlaps(span: tuple[int, int], spans: list[tuple[int, int]]) -> bool:
+    """
+    Check if a span overlaps with any of the spans in a list of spans.
+    """
+    s, e = span
+    for s2, e2 in spans:
+        if s < e2 and s2 < e:
+            return True
+    return False
 
 def rank_articles(
     articles: dict[str, ArticleContent],
@@ -33,6 +44,8 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
 
     avgdl = calculate_average_doclength(articles)
     avg_title_length, avg_body_length = avgdl
+
+    now = datetime.now(timezone.utc)
 
     ranked_articles = {}
     for url, article in articles.items():
@@ -83,14 +96,44 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
                 title_matches = list(pattern.finditer(title))
                 body_matches = list(pattern.finditer(body))
 
-                title_tf = min(len(title_matches), 3)
-                body_tf = min(len(body_matches), 3)
-
-                title_phrase_spans.extend([match.span() for match in title_matches])
-                body_phrase_spans.extend([match.span() for match in body_matches])
-
-                interest_score += interest_weight * term_weight * (
-                    2.0 * _bm25_tf(title_tf, title_length, avg_title_length) +
-                    1.0 * _bm25_tf(body_tf, body_length, avg_body_length)
+                title_tf = min(
+                    sum(
+                        1 # increment by 1 if no overlaps with existing phrase spans
+                        for match in title_matches
+                        if not overlaps(match.span(), title_phrase_spans)
+                    ),
+                    3 # max of 3
+                )
+                body_tf = min(
+                    sum(
+                        1
+                        for match in body_matches
+                        if not overlaps(match.span(), body_phrase_spans)
+                    ),
+                    3
                 )
 
+                interest_score += interest_weight * term_weight * (
+                    4.0 * _bm25_tf(title_tf, title_length, avg_title_length) +
+                    2.0 * _bm25_tf(body_tf, body_length, avg_body_length)
+                )
+
+            if interest_score > 0:
+                matched_interests.append(interest_id)
+                score += interest_score
+
+        if score > 0:
+            source = sources_by_id.get(article.source_id, {})
+            if article.published_at is not None:
+                age_hours = (now - article.published_at).total_seconds() / 3600
+                lookback_hours = config.get("digest", {}).get("lookback_hours", 48)
+                recency = 2.0 * max(0.0, 1.0 - age_hours / lookback_hours)
+                score += recency
+            priority = min(max(source.get("priority_boost", 0.0), 0.0), 1.0) # copilot was smart here and suggested this as a fix for a potential edge case if someone is an idiot
+            score += priority
+        ranked_articles[url] = RankedArticle(
+            article=article,
+            score=score,
+            matched_interests=matched_interests
+        )
+    return ranked_articles
