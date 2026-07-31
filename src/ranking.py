@@ -8,16 +8,9 @@ import yaml
 from src.models.article_content import ArticleContent
 from src.models.ranked_article import RankedArticle
 from normalise import normalise_for_matching
+from calculations import _bm25_tf, calculate_average_doclength
 
 _DEFAULT_CONFIG = Path("config/config.yaml")
-
-def _bm25_tf(tf: int, dl: int, avgdl: float, k: float = 1.2, b: float = 0.6) -> float:
-    """
-    Calculate the BM25 term frequency score for a term in a document.
-    """
-    if avgdl == 0:
-        return float(tf) # Don't divide by 0
-    return ((k + 1) * tf) / (tf + k * (1 - b + b * (dl / avgdl))) # Mafs
 
 def rank_articles(
     articles: dict[str, ArticleContent],
@@ -35,9 +28,10 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
     """
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
-
-    k = 1.2; b = 0.6
     score = 0.0
+
+    avgdl = calculate_average_doclength(articles)
+    avg_title_length, avg_body_length = avgdl
 
     ranked_articles = {}
     for url, article in articles.items():
