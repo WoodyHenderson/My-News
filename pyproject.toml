@@ -23,7 +23,7 @@ dependencies = [
     "platformdirs>=4.3.6"
 ]
 
-[project-scripts]
+[project.scripts]
 my-news = "src.cli:app"
 
 [project.optional-dependencies]

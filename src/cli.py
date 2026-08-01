@@ -6,13 +6,14 @@ from typing import Annotated, Optional
 
 from src.commands.config_init import ConfigInitError, initialize_config
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
+from src.commands.config_run import ConfigRunError, run_application
 from src.fetch_articles import fetch_articles
 
 """ CLI that we will use for interacting with the app. """
 
 app = typer.Typer(
     name="mycli",
-    help="A simple CLI application built with Typer.",
+    help="A CLI is funnier than a frontend",
     no_args_is_help=True
 )
 
@@ -62,7 +63,11 @@ def run(
     """
     try:
         config_data = load_and_validate_config(config)
+        run_application(config_data=config_data, output_path=output)
     except ConfigValidationError as e:
         typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
     typer.secho(f"Configuration file {config} loaded successfully.", fg="green")
+
+if __name__ == "__main__":
+    app()
