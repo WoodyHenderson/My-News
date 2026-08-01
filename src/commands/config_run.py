@@ -99,9 +99,13 @@ def run_application(
         typer.secho(f"Failed to rank articles: {e}", fg="red")
         raise ConfigRunError(f"Failed to rank articles: {e}") from e
     try:
-        typer.echo(f"Generating PDF...")
-        generate_pdf(ranked_articles, output_path)
-        typer.secho(f"Successfully generated PDF at {output_path}", fg="green")
+        typer.echo("Generating PDF...")
+        pdf_path = generate_pdf(
+            ranked_articles,
+            output_path,
+            digest_config=config_data.get("digest", {}),
+        )
+        typer.secho(f"Successfully generated PDF at {pdf_path}", fg="green")
     except Exception as e:
         typer.secho(f"Failed to generate PDF: {e}", fg="red")
         raise ConfigRunError(f"Failed to generate PDF: {e}") from e

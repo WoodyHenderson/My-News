@@ -2,50 +2,39 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="author" content="My News">
-	<meta name="generator" content="My News">
 	<title>{{ title }}</title>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-	<header class="digest-header">
-		<p class="eyebrow">Personal news digest</p>
+	<header>
 		<h1>{{ title }}</h1>
-		<p class="edition">
-			{{ articles | length }} {{ "story" if articles | length == 1 else "stories" }}
+		<p>
+			{{ articles | length }} {{ "article" if articles | length == 1 else "articles" }}
 			&middot;
-			Generated <time datetime="{{ generated_at.isoformat() }}">{{ generated_at.strftime("%d %B %Y at %H:%M %Z") }}</time>
+			Generated {{ generated_at.strftime("%d %B %Y") }}
 		</p>
 	</header>
 
 	<main>
 		{% if articles %}
-			<ol class="digest-list">
-				{% for url, ranked in articles %}
-					<li class="story">
-						<span class="rank" aria-hidden="true">{{ loop.index }}</span>
-						<article>
-							<h2><a href="{{ url }}">{{ ranked.article.title }}</a></h2>
-							<ul class="metadata" role="list">
-								<li>{{ ranked.article.source_id }}</li>
-								{% if ranked.article.published_at %}
-									<li>
-										<time datetime="{{ ranked.article.published_at.isoformat() }}">
-											{{ ranked.article.published_at.strftime("%d %b %Y, %H:%M") }}
-										</time>
-									</li>
-								{% endif %}
-								<li>Score {{ "%.1f" | format(ranked.score) }}</li>
-							</ul>
-							{% if ranked.matched_interests %}
-								<p class="matches">Matched: {{ ranked.matched_interests | join(", ") }}</p>
-							{% endif %}
-						</article>
-					</li>
-				{% endfor %}
-			</ol>
+			{% for url, ranked in articles %}
+				<article>
+					<h2>{{ loop.index }}. {{ ranked.article.title }}</h2>
+					<p class="metadata">
+						Score {{ "%.2f" | format(ranked.score) }}
+						&middot; {{ ranked.article.source_id }}
+						{% if ranked.article.published_at %}
+							&middot; {{ ranked.article.published_at.strftime("%d %b %Y") }}
+						{% endif %}
+					</p>
+					<p class="url"><a href="{{ url }}">{{ url }}</a></p>
+					{% if show_match_reasons and ranked.matched_interests %}
+						<p class="matches">Matched: {{ ranked.matched_interests | join(", ") }}</p>
+					{% endif %}
+				</article>
+			{% endfor %}
 		{% else %}
-			<p class="empty-state">No stories matched this edition.</p>
+			<p>No articles matched this edition.</p>
 		{% endif %}
 	</main>
 </body>

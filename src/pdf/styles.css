@@ -1,171 +1,60 @@
 @page {
 	size: A4;
-	margin: 20mm 18mm 18mm;
-
-	@bottom-left {
-		content: "My News · " string(digest-date);
-		color: #68717a;
-		font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
-		font-size: 8pt;
-	}
+	margin: 18mm;
 
 	@bottom-right {
-		content: "Page " counter(page) " of " counter(pages);
-		color: #68717a;
-		font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
+		content: "Page " counter(page);
+		color: #666666;
 		font-size: 8pt;
 	}
-}
-
-:root {
-	color: #20262c;
-	font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
-	font-size: 10pt;
-	line-height: 1.45;
-}
-
-html {
-	background: #ffffff;
 }
 
 body {
+	color: #222222;
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 10pt;
+	line-height: 1.4;
 	margin: 0;
 }
 
-.digest-header {
-	border-bottom: 2pt solid #17324d;
-	margin-bottom: 7mm;
-	padding-bottom: 5mm;
-}
-
-.eyebrow {
-	color: #b3432f;
-	font-size: 8pt;
-	font-weight: 700;
-	letter-spacing: 0;
-	margin: 0 0 2mm;
-	text-transform: uppercase;
+header {
+	border-bottom: 1pt solid #999999;
+	margin-bottom: 6mm;
+	padding-bottom: 4mm;
 }
 
 h1 {
-	color: #17324d;
-	font-family: Georgia, "Times New Roman", serif;
-	font-size: 28pt;
-	font-weight: 700;
-	letter-spacing: 0;
-	line-height: 1.05;
-	margin: 0 0 3mm;
+	font-size: 22pt;
+	margin: 0 0 2mm;
 }
 
-.edition {
-	color: #59636d;
-	font-size: 9pt;
-	margin: 0;
-}
-
-.edition time {
-	string-set: digest-date content(text);
-}
-
-.digest-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.story {
-	border-bottom: 0.5pt solid #d7dce0;
+article {
+	border-bottom: 0.5pt solid #cccccc;
 	break-inside: avoid;
-	display: flex;
-	margin: 0 0 5mm;
-	orphans: 3;
-	padding: 0 0 5mm;
+	margin-bottom: 5mm;
+	padding-bottom: 5mm;
 	page-break-inside: avoid;
-	widows: 3;
-}
-
-.story:last-child {
-	border-bottom: 0;
-	margin-bottom: 0;
-}
-
-.story article {
-	flex: 1;
-	min-width: 0;
-}
-
-.rank {
-	color: #b3432f;
-	flex: 0 0 10mm;
-	font-family: Georgia, "Times New Roman", serif;
-	font-size: 19pt;
-	font-weight: 700;
-	line-height: 1.1;
-	padding-right: 4mm;
 }
 
 h2 {
-	font-family: Georgia, "Times New Roman", serif;
 	font-size: 14pt;
-	font-weight: 700;
-	letter-spacing: 0;
-	line-height: 1.25;
-	margin: 0 0 2.5mm;
+	margin: 0 0 2mm;
+	overflow-wrap: anywhere;
+}
+
+.metadata {
+	color: #555555;
+	font-size: 9pt;
+	margin: 0 0 2mm;
+}
+
+.url,
+.matches {
+	font-size: 9pt;
+	margin: 0 0 1mm;
 	overflow-wrap: anywhere;
 }
 
 a {
-	color: #15597a;
-	text-decoration: underline;
-	text-decoration-color: #7b9bad;
-	text-decoration-thickness: 0.5pt;
-	text-underline-offset: 1.5pt;
-}
-
-a:visited {
-	color: #4b5264;
-}
-
-.metadata {
-	color: #5c6670;
-	display: flex;
-	flex-wrap: wrap;
-	font-size: 8.5pt;
-	line-height: 1.4;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.metadata li {
-	overflow-wrap: anywhere;
-}
-
-.metadata li:not(:last-child)::after {
-	color: #a4abb1;
-	content: "·";
-	margin: 0 2.5mm;
-}
-
-.matches {
-	border-left: 2pt solid #d9a441;
-	color: #39434c;
-	font-size: 8.5pt;
-	margin: 2.5mm 0 0;
-	padding-left: 2.5mm;
-}
-
-.empty-state {
-	background: #f4f2ec;
-	border: 0.5pt solid #d8d3c7;
-	color: #59636d;
-	margin: 0;
-	padding: 10mm;
-	text-align: center;
-}
-
-@media print {
-	a {
-		color: #15597a;
-	}
+	color: #174f78;
 }
