@@ -62,9 +62,8 @@ def run(
     Run the application with the specified configuration file and output path.
     """
     try:
-        config_data = load_and_validate_config(config)
-        run_application(config_data=config_data, output_path=output)
-    except ConfigValidationError as e:
+        run_application(config_path=config, output_path=output)
+    except ConfigRunError as e:
         typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
     typer.secho(f"Configuration file {config} loaded successfully.", fg="green")
