@@ -25,12 +25,37 @@ def overlaps(span: tuple[int, int], spans: list[tuple[int, int]]) -> bool:
 def rank_articles(
     articles: dict[str, ArticleContent],
     config_path: Path = _DEFAULT_CONFIG,
-) -> dict[str, RankedArticle]:
+) -> list[tuple[str, RankedArticle]]:
     """
     This function is here to rank articles after they have been scored, will return a dict
     of url: RankedArticle object, which contains ArticleContent, score, and matched_interests.
     """
-    ranked_articles = {}
+    ranked_articles = score_articles(articles, config_path)
+
+    with open(config_path, "r") as f:
+        config = yaml.safe_load(f)
+    digest = config.get("digest", {})
+    minimum_score = digest.get("minimum_score", 1.0)
+    max_articles = digest.get("max_articles", 30)
+
+    above_minimum = []
+    for url, r in ranked_articles.items():
+        if r.score >= minimum_score:
+            above_minimum.append((url, r))
+
+    def sort_key(item: tuple[str, RankedArticle]):
+        url, ranked = item
+        published = ranked.article.published_at
+
+        if published is not None:
+            timestamp = -published.timestamp()
+        else:
+            timestamp = 0
+
+        return (-ranked.score, timestamp, normalise_for_matching(ranked.article.title))
+
+    above_minimum.sort(key=sort_key)
+    return above_minimum[:max_articles]
 
 def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEFAULT_CONFIG) -> dict[str, RankedArticle]:
     """
@@ -67,7 +92,9 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
             body_phrase_spans = []
 
             interest_weight = interest.get("weight", 1.0)
-            sorted_phrases = sorted(
+            # Sort by longest to shortest to ensure shorter phrases that are included
+            # in longer phrases don't get double counted.
+            sorted_phrases = sorted( 
                 interest.get("phrases", {}).items(),
                 key=lambda x: len(x[0]), reverse=True
             )
@@ -91,7 +118,8 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
 
             for term, term_weight in interest.get("terms", {}).items():
                 term = normalise_for_matching(term)
-                pattern = re.compile(re.escape(term))
+                # Dont ask me how this regex works, copilot wrote it
+                pattern = re.compile(rf"(?<!\w){re.escape(term)}(?!\w)") 
 
                 title_matches = list(pattern.finditer(title))
                 body_matches = list(pattern.finditer(body))
