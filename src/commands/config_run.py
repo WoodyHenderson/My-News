@@ -65,14 +65,17 @@ def run_application(
 
     # Lets start by gathering all the sources from the configuration file
     try:
-        typer.echo("Gathering urls from configuration...")
-        urls = config_data.get("url", [])
+        typer.echo("Gathering sources from configuration...")
+        sources = config_data.get("sources", [])
     except Exception as e:
-        typer.secho(f"Failed to gather urls from configuration: {e}", fg="red")
-        raise ConfigRunError(f"Failed to gather urls from configuration: {e}") from e
+        typer.secho(f"Failed to gather sources from configuration: {e}", fg="red")
+        raise ConfigRunError(f"Failed to gather sources from configuration: {e}") from e
     try:
-        typer.echo(f"Fetching articles from {len(urls)} sources...")
-        article_data = fetch_articles(urls)
+        typer.echo(f"Fetching articles from {len(sources)} sources...")
+        max_articles_per_source = config_data.get("network", {}).get(
+            "max_article_fetches_per_source", 20
+        )
+        article_data = fetch_articles(sources, max_articles_per_source)
         typer.secho(f"Successfully fetched {len(article_data)} articles", fg="green")
     except Exception as e:
         typer.secho(f"Failed to fetch articles: {e}", fg="red")
@@ -85,9 +88,13 @@ def run_application(
         typer.secho(f"Failed to normalise and validate articles: {e}", fg="red")
         raise ConfigRunError(f"Failed to normalise and validate articles: {e}") from e
     try:
-        typer.echo(f"Ranking articles based on your preferences...")
+        typer.echo(f"Scoring and ranking {len(article_data)} articles based on your preferences...")
         ranked_articles = rank_articles(article_data, config_path)
-        typer.secho(f"Successfully ranked {len(ranked_articles)} articles", fg="green")
+        typer.secho(
+            f"Successfully scored {len(article_data)} articles and selected "
+            f"{len(ranked_articles)} for the digest",
+            fg="green",
+        )
     except Exception as e:
         typer.secho(f"Failed to rank articles: {e}", fg="red")
         raise ConfigRunError(f"Failed to rank articles: {e}") from e
