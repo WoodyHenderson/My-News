@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="My News">
+	<meta name="generator" content="My News">
+	<title>{{ title }}</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header class="digest-header">
+		<p class="eyebrow">Personal news digest</p>
+		<h1>{{ title }}</h1>
+		<p class="edition">
+			{{ articles | length }} {{ "story" if articles | length == 1 else "stories" }}
+			&middot;
+			Generated <time datetime="{{ generated_at.isoformat() }}">{{ generated_at.strftime("%d %B %Y at %H:%M %Z") }}</time>
+		</p>
+	</header>
+
+	<main>
+		{% if articles %}
+			<ol class="digest-list">
+				{% for url, ranked in articles %}
+					<li class="story">
+						<span class="rank" aria-hidden="true">{{ loop.index }}</span>
+						<article>
+							<h2><a href="{{ url }}">{{ ranked.article.title }}</a></h2>
+							<ul class="metadata" role="list">
+								<li>{{ ranked.article.source_id }}</li>
+								{% if ranked.article.published_at %}
+									<li>
+										<time datetime="{{ ranked.article.published_at.isoformat() }}">
+											{{ ranked.article.published_at.strftime("%d %b %Y, %H:%M") }}
+										</time>
+									</li>
+								{% endif %}
+								<li>Score {{ "%.1f" | format(ranked.score) }}</li>
+							</ul>
+							{% if ranked.matched_interests %}
+								<p class="matches">Matched: {{ ranked.matched_interests | join(", ") }}</p>
+							{% endif %}
+						</article>
+					</li>
+				{% endfor %}
+			</ol>
+		{% else %}
+			<p class="empty-state">No stories matched this edition.</p>
+		{% endif %}
+	</main>
+</body>
+</html>

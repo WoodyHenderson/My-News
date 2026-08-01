@@ -1,4 +1,4 @@
-from normalise import normalise_for_matching
+from src.normalise import normalise_for_matching
 from src.models.article_content import ArticleContent
 
 def _bm25_tf(tf: int, dl: int, avgdl: float, k: float = 1.2, b: float = 0.6) -> float:

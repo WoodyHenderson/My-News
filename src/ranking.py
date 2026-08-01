@@ -7,8 +7,8 @@ import yaml
 
 from src.models.article_content import ArticleContent
 from src.models.ranked_article import RankedArticle
-from normalise import normalise_for_matching
-from calculations import _bm25_tf, calculate_average_doclength
+from src.normalise import normalise_for_matching
+from src.calculations import _bm25_tf, calculate_average_doclength
 
 _DEFAULT_CONFIG = Path("config/config.yaml")
 

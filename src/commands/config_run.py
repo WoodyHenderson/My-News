@@ -7,6 +7,8 @@ from src.commands.config_validation import ConfigValidationError, load_and_valid
 from src.fetch_articles import fetch_articles
 from src.models.article_content import ArticleContent
 from src.normalise import normalise_validate_articles
+from src.ranking import rank_articles
+from src.pdf.generate_pdf import generate_pdf
 
 '''
 What run should include:
@@ -62,7 +64,12 @@ def run_application(
         raise ConfigRunError(f"Configuration validation failed: {e}") from e
 
     # Lets start by gathering all the sources from the configuration file
-    urls = config_data.get("url", [])
+    try:
+        typer.echo("Gathering urls from configuration...")
+        urls = config_data.get("url", [])
+    except Exception as e:
+        typer.secho(f"Failed to gather urls from configuration: {e}", fg="red")
+        raise ConfigRunError(f"Failed to gather urls from configuration: {e}") from e
     try:
         typer.echo(f"Fetching articles from {len(urls)} sources...")
         article_data = fetch_articles(urls)
@@ -77,6 +84,19 @@ def run_application(
     except Exception as e:
         typer.secho(f"Failed to normalise and validate articles: {e}", fg="red")
         raise ConfigRunError(f"Failed to normalise and validate articles: {e}") from e
-    
+    try:
+        typer.echo(f"Ranking articles based on your preferences...")
+        ranked_articles = rank_articles(article_data, config_path)
+        typer.secho(f"Successfully ranked {len(ranked_articles)} articles", fg="green")
+    except Exception as e:
+        typer.secho(f"Failed to rank articles: {e}", fg="red")
+        raise ConfigRunError(f"Failed to rank articles: {e}") from e
+    try:
+        typer.echo(f"Generating PDF...")
+        generate_pdf(ranked_articles, output_path)
+        typer.secho(f"Successfully generated PDF at {output_path}", fg="green")
+    except Exception as e:
+        typer.secho(f"Failed to generate PDF: {e}", fg="red")
+        raise ConfigRunError(f"Failed to generate PDF: {e}") from e
 
     

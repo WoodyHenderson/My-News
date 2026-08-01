@@ -48,6 +48,3 @@ def normalise_validate_articles(articles: dict[str, ArticleContent]) -> dict[str
             published_at=article.published_at,
         )
     return normalised_articles
-
-
-
