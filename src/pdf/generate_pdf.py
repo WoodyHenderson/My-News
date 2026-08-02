@@ -1,34 +1,24 @@
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
+from warnings import warn
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
-from weasyprint import HTML
 
 from src.models.ranked_article import RankedArticle
 
 _PDF_DIRECTORY = Path(__file__).resolve().parent
+_HTML_SUFFIXES = {".htm", ".html"}
 
 
-def generate_pdf(
+def _render_digest_html(
     ranked_articles: Sequence[tuple[str, RankedArticle]],
-    output_path: Path | None = None,
     *,
     digest_config: Mapping[str, object] | None = None,
-) -> Path:
-    """Render a simple PDF digest ordered from highest to lowest score."""
+) -> tuple[str, Path]:
     config = digest_config or {}
     generated_at = datetime.now(UTC)
     articles = sorted(ranked_articles, key=lambda item: item[1].score, reverse=True)
-
-    if output_path is None:
-        output_directory = Path(str(config.get("output_directory", "output")))
-        filename = str(config.get("filename", "digest-{date}.pdf"))
-        output_path = output_directory / filename.replace(
-            "{date}", generated_at.date().isoformat()
-        )
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     environment = Environment(
         loader=FileSystemLoader(_PDF_DIRECTORY),
@@ -42,6 +32,54 @@ def generate_pdf(
         show_match_reasons=bool(config.get("show_match_reasons", True)),
     )
 
+    return rendered_html, _PDF_DIRECTORY
+
+
+def _write_html(rendered_html: str, output_path: Path) -> None:
+    output_path.write_text(rendered_html, encoding="utf-8")
+
+
+def _write_pdf(rendered_html: str, output_path: Path) -> None:
+    from weasyprint import HTML
+
     HTML(string=rendered_html, base_url=_PDF_DIRECTORY.as_uri()).write_pdf(output_path)
+
+
+def generate_pdf(
+    ranked_articles: Sequence[tuple[str, RankedArticle]],
+    output_path: Path | None = None,
+    *,
+    digest_config: Mapping[str, object] | None = None,
+) -> Path:
+    """Render a simple PDF digest ordered from highest to lowest score."""
+    config = digest_config or {}
+
+    if output_path is None:
+        output_directory = Path(str(config.get("output_directory", "output")))
+        filename = str(config.get("filename", "digest-{date}.pdf"))
+        output_path = output_directory / filename.replace(
+            "{date}", datetime.now(UTC).date().isoformat()
+        )
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    rendered_html, _ = _render_digest_html(ranked_articles, digest_config=config)
+
+    if output_path.suffix.lower() in _HTML_SUFFIXES:
+        _write_html(rendered_html, output_path)
+        return output_path
+
+    try:
+        _write_pdf(rendered_html, output_path)
+        return output_path
+    except Exception as exc:
+        fallback_path = output_path.with_suffix(".html")
+        _write_html(rendered_html, fallback_path)
+        warn(
+            f"WeasyPrint is unavailable or failed to render the PDF ({exc!s}). "
+            f"Wrote HTML output to {fallback_path} instead.",
+            stacklevel=2,
+        )
+        return fallback_path
 
     return output_path
