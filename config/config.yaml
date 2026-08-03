@@ -232,7 +232,7 @@ sources:
     name: "Associated Press - Front Page"
     enabled: true
     kind: "feed"
-    url: "https://rsshub.app/apnews/rss/index"
+    url: "https://rsshub.app/apnews/topics"
     site_url: "https://apnews.com/"
     priority_boost: 0.5
     interests:
