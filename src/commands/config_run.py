@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-import typer
+from typing import Callable
 
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
 from src.fetch_articles import fetch_articles
@@ -51,63 +51,71 @@ sources:
 def run_application(
     config_path: Path,
     output_path: Path | None = None,
+    on_progress: Callable[[str, str], None] | None = None,
 ) -> None:
     """
     Run the application with the specified configuration file and output path.
+
+    on_progress is an optional callback called with (message, level) where level
+    is one of 'info', 'success', or 'error'.
     """
+    def progress(msg: str, level: str = "info") -> None:
+        if on_progress:
+            on_progress(msg, level)
+
     try:
-        typer.echo("Loading and validating configuration...")
+        progress("Loading and validating configuration...")
         config_data = load_and_validate_config(config_path)
-        typer.secho("Configuration validated successfully", fg="green")
+        progress("Configuration validated successfully", "success")
     except ConfigValidationError as e:
-        typer.secho(f"Configuration validation failed: {e}", fg="red")
+        progress(f"Configuration validation failed: {e}", "error")
         raise ConfigRunError(f"Configuration validation failed: {e}") from e
 
     # Lets start by gathering all the sources from the configuration file
     try:
-        typer.echo("Gathering sources from configuration...")
+        progress("Gathering sources from configuration...")
         sources = config_data.get("sources", [])
     except Exception as e:
-        typer.secho(f"Failed to gather sources from configuration: {e}", fg="red")
+        progress(f"Failed to gather sources from configuration: {e}", "error")
         raise ConfigRunError(f"Failed to gather sources from configuration: {e}") from e
     try:
-        typer.echo(f"Fetching articles from {len(sources)} sources...")
+        progress(f"Fetching articles from {len(sources)} sources...")
         max_articles_per_source = config_data.get("network", {}).get(
             "max_article_fetches_per_source", 20
         )
         article_data = fetch_articles(sources, max_articles_per_source)
-        typer.secho(f"Successfully fetched {len(article_data)} articles", fg="green")
+        progress(f"Successfully fetched {len(article_data)} articles", "success")
     except Exception as e:
-        typer.secho(f"Failed to fetch articles: {e}", fg="red")
+        progress(f"Failed to fetch articles: {e}", "error")
         raise ConfigRunError(f"Failed to fetch articles: {e}") from e
     try:
-        typer.echo(f"Normalising and validating {len(article_data)} articles...")
+        progress(f"Normalising and validating {len(article_data)} articles...")
         article_data = normalise_validate_articles(article_data)
-        typer.secho(f"Successfully normalised {len(article_data)} articles", fg="green")
+        progress(f"Successfully normalised {len(article_data)} articles", "success")
     except Exception as e:
-        typer.secho(f"Failed to normalise and validate articles: {e}", fg="red")
+        progress(f"Failed to normalise and validate articles: {e}", "error")
         raise ConfigRunError(f"Failed to normalise and validate articles: {e}") from e
     try:
-        typer.echo(f"Scoring and ranking {len(article_data)} articles based on your preferences...")
+        progress(f"Scoring and ranking {len(article_data)} articles based on your preferences...")
         ranked_articles = rank_articles(article_data, config_path)
-        typer.secho(
+        progress(
             f"Successfully scored {len(article_data)} articles and selected "
             f"{len(ranked_articles)} for the digest",
-            fg="green",
+            "success",
         )
     except Exception as e:
-        typer.secho(f"Failed to rank articles: {e}", fg="red")
+        progress(f"Failed to rank articles: {e}", "error")
         raise ConfigRunError(f"Failed to rank articles: {e}") from e
     try:
-        typer.echo("Generating digest output...")
+        progress("Generating digest output...")
         digest_path = generate_pdf(
             ranked_articles,
             output_path,
             digest_config=config_data.get("digest", {}),
         )
-        typer.secho(f"Successfully generated digest at {digest_path}", fg="green")
+        progress(f"Successfully generated digest at {digest_path}", "success")
     except Exception as e:
-        typer.secho(f"Failed to generate digest output: {e}", fg="red")
+        progress(f"Failed to generate digest output: {e}", "error")
         raise ConfigRunError(f"Failed to generate digest output: {e}") from e
 
     

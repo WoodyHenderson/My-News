@@ -61,8 +61,16 @@ def run(
     """
     Run the application with the specified configuration file and output path.
     """
+    def _progress(msg: str, level: str) -> None:
+        if level == "success":
+            typer.secho(msg, fg="green")
+        elif level == "error":
+            typer.secho(msg, fg="red")
+        else:
+            typer.echo(msg)
+
     try:
-        run_application(config_path=config, output_path=output)
+        run_application(config_path=config, output_path=output, on_progress=_progress)
     except ConfigRunError as e:
         typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
