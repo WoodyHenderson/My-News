@@ -195,7 +195,7 @@ class MainWindow(QMainWindow):
             }
             QLabel#mastheadTitle {
                 color: #fffdf7;
-                font-family: "Iowan Old Style", "Georgia";
+                font-family: "Georgia";
                 font-size: 44px;
                 font-weight: 700;
                 letter-spacing: 0;
@@ -216,7 +216,7 @@ class MainWindow(QMainWindow):
             }
             QLabel#sectionTitle {
                 color: #17201d;
-                font-family: "Iowan Old Style", "Georgia";
+                font-family: "Georgia";
                 font-size: 30px;
                 font-weight: 600;
                 letter-spacing: 0;
