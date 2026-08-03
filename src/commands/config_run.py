@@ -8,7 +8,7 @@ from src.fetch_articles import fetch_articles
 from src.models.article_content import ArticleContent
 from src.normalise import normalise_validate_articles
 from src.ranking import rank_articles
-from src.pdf.generate_pdf import generate_pdf
+from src.output_generation.generate_pdf import generate_pdf
 
 '''
 What run should include:
