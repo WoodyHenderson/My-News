@@ -5,7 +5,7 @@ from datetime import date
 from pathlib import Path
 
 from PyQt6.QtCore import QObject, QSize, Qt, QThread, QUrl, pyqtSignal
-from PyQt6.QtGui import QDesktopServices, QFont
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QSizePolicy,
     QStyle,
@@ -20,6 +21,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+from src.html_viewer import HtmlViewerWindow
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
@@ -74,6 +77,7 @@ class MainWindow(QMainWindow):
         self.config_path = config_path
         self._run_thread: QThread | None = None
         self._run_worker: RunDigestWorker | None = None
+        self._viewer_window: HtmlViewerWindow | None = None
 
         self.setObjectName("mainWindow")
         self.setWindowTitle("My News")
@@ -432,11 +436,17 @@ class MainWindow(QMainWindow):
             self.refresh_outputs()
             return
 
-        opened = QDesktopServices.openUrl(QUrl.fromLocalFile(str(selected.resolve())))
-        if opened:
-            self.run_status.setText(f"Opened {selected.name}")
-        else:
-            self.run_status.setText("Could not open the selected digest.")
+        try:
+            self._viewer_window = HtmlViewerWindow(selected)
+        except RuntimeError as exc:
+            self.run_status.setText("Viewer failed to initialize")
+            QMessageBox.critical(self, "Viewer Error", str(exc))
+            return
+
+        self._viewer_window.show()
+        self._viewer_window.raise_()
+        self._viewer_window.activateWindow()
+        self.run_status.setText(f"Viewing {selected.name} in app")
 
     def _on_run_progress(self, message: str, level: str) -> None:
         if level == "error":
