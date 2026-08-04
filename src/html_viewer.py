@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from PyQt6.QtCore import QUrl
+from PyQt6.QtCore import QUrl, QObject, pyqtSlot
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QWidget
+from PyQt6.QtWebChannel import QWebChannel
+
+from src.seen_articles import mark_seen
 
 try:
     # Import WebEngine before QApplication is created to satisfy Qt initialization rules.
@@ -30,6 +33,11 @@ class HtmlViewerWindow(QMainWindow):
         self.setCentralWidget(self.web_view)
         self._load_html()
 
+        self.channel = QWebChannel(self.web_view.page())
+        self.bridge = SeenBridge()
+        self.channel.registerObject("pyBridge", self.bridge)
+        self.web_view.page().setWebChannel(self.channel)
+
     def _create_web_view(self) -> QWidget:
         if QWebEngineView is None:
             raise RuntimeError(
@@ -49,3 +57,15 @@ class HtmlViewerWindow(QMainWindow):
             return
 
         self.web_view.load(QUrl.fromLocalFile(str(self.html_path)))
+
+class PyBridge(QObject):
+    """Bridge for JavaScript to call Python functions."""
+
+    @pyqtSlot(str)
+    def markSeen(self, url: str) -> bool:
+        """Mark the given URL as seen"""
+        try:
+            mark_seen(url)
+            return True
+        except Exception as exc:
+            return False

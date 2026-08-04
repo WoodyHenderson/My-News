@@ -26,6 +26,7 @@
 							class="mark-seen-button"
 							data-url="{{ url }}"
 							aria-label="Mark this article as seen"
+							onclick=""
 							>
 							Mark as seen
 						</button>
@@ -47,5 +48,7 @@
 			<p>No articles matched this edition.</p>
 		{% endif %}
 	</main>
+	<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+	<script src="digest.js" defer></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ from src.fetch_articles import fetch_articles
 from src.models.article_content import ArticleContent
 from src.normalise import normalise_validate_articles
 from src.ranking import rank_articles
-from src.output_generation.generate_pdf import generate_pdf
+from src.output_generation.generate_digest import generate_digest
 
 '''
 What run should include:
@@ -108,7 +108,7 @@ def run_application(
         raise ConfigRunError(f"Failed to rank articles: {e}") from e
     try:
         progress("Generating digest output...")
-        digest_path = generate_pdf(
+        digest_path = generate_digest(
             ranked_articles,
             output_path,
             digest_config=config_data.get("digest", {}),
