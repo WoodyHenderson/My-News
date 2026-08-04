@@ -47,10 +47,16 @@ class RunDigestWorker(QObject):
     finished = pyqtSignal(str)
     failed = pyqtSignal(str)
 
-    def __init__(self, config_path: Path, output_path: Path) -> None:
+    def __init__(
+        self,
+        config_path: Path,
+        output_path: Path,
+        max_articles_override: int | None,
+    ) -> None:
         super().__init__()
         self.config_path = config_path
         self.output_path = output_path
+        self.max_articles_override = max_articles_override
 
     def run(self) -> None:
         try:
@@ -60,6 +66,7 @@ class RunDigestWorker(QObject):
                 config_path=self.config_path,
                 output_path=self.output_path,
                 on_progress=self.progress.emit,
+                max_articles_override=self.max_articles_override,
             )
             self.finished.emit(str(self.output_path.resolve()))
         except Exception as exc:
@@ -166,6 +173,26 @@ class MainWindow(QMainWindow):
         selector_row.addWidget(refresh_button)
         content_layout.addLayout(selector_row)
 
+        max_articles_label = QLabel("MAX ARTICLES")
+        max_articles_label.setObjectName("fieldLabel")
+        content_layout.addSpacing(18)
+        content_layout.addWidget(max_articles_label)
+
+        self.max_articles_selector = QComboBox()
+        self.max_articles_selector.setObjectName("maxArticlesSelector")
+        self.max_articles_selector.setMinimumHeight(44)
+        self.max_articles_selector.setSizePolicy(
+            QSizePolicy.Policy.Fixed,
+            QSizePolicy.Policy.Fixed,
+        )
+        self.max_articles_selector.addItem("ALL", 0)
+        for value in (10, 20, 30, 40, 50):
+            self.max_articles_selector.addItem(str(value), value)
+        self.max_articles_selector.setCurrentIndex(
+            self.max_articles_selector.findData(30)
+        )
+        content_layout.addWidget(self.max_articles_selector)
+
         self.library_status = QLabel()
         self.library_status.setObjectName("libraryStatus")
         content_layout.addSpacing(10)
@@ -210,7 +237,7 @@ class MainWindow(QMainWindow):
         content_layout.addSpacing(14)
         content_layout.addWidget(self.run_status)
 
-        phase_label = QLabel("PHASE 03  /  LINKED COMMANDS")
+        phase_label = QLabel("PRAYERS IT WORKS")
         phase_label.setObjectName("phaseLabel")
         content_layout.addWidget(phase_label)
         page_layout.addWidget(content, stretch=1)
@@ -296,6 +323,39 @@ class MainWindow(QMainWindow):
                 selection-background-color: #dfe8e2;
                 selection-color: #17201d;
                 padding: 5px;
+            }
+            QComboBox#maxArticlesSelector {
+                background: #ffffff;
+                color: #17201d;
+                border: 1px solid #c9ceca;
+                border-radius: 4px;
+                padding: 0 12px;
+                min-width: 110px;
+                font-family: "Avenir Next";
+                font-size: 14px;
+            }
+            QComboBox#maxArticlesSelector:hover {
+                border-color: #7b8780;
+            }
+            QComboBox#maxArticlesSelector:focus {
+                border: 2px solid #28775b;
+                padding-left: 11px;
+            }
+            QComboBox#maxArticlesSelector:disabled {
+                background: #e7e9e6;
+                color: #7b837f;
+            }
+            QComboBox#maxArticlesSelector::drop-down {
+                border: 0;
+                width: 34px;
+            }
+            QComboBox#maxArticlesSelector QAbstractItemView {
+                background: #ffffff;
+                color: #17201d;
+                border: 1px solid #c9ceca;
+                selection-background-color: #dfe8e2;
+                selection-color: #17201d;
+                padding: 4px;
             }
             QToolButton#refreshButton {
                 background: #ffffff;
@@ -403,10 +463,15 @@ class MainWindow(QMainWindow):
             return
 
         output_path = self.output_dir / f"my-news-{date.today().isoformat()}.html"
+        selected_max_articles = int(self.max_articles_selector.currentData())
         self._set_running_state(True)
         self.run_status.setText("Starting digest run...")
 
-        self._run_worker = RunDigestWorker(self.config_path, output_path)
+        self._run_worker = RunDigestWorker(
+            self.config_path,
+            output_path,
+            selected_max_articles,
+        )
         self._run_thread = QThread(self)
         self._run_worker.moveToThread(self._run_thread)
 
@@ -467,6 +532,7 @@ class MainWindow(QMainWindow):
         self.run_button.setEnabled(not running)
         self.output_selector.setEnabled(not running and has_selected_output)
         self.view_button.setEnabled(not running and has_selected_output)
+        self.max_articles_selector.setEnabled(not running)
 
 
 def main() -> int:

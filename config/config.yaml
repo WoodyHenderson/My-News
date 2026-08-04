@@ -9,13 +9,11 @@ digest:
   lookback_hours: 48
   max_articles: 30
   minimum_score: 1.0
-  repeat_window_days: 7
   output_directory: "output"
   filename: "my-news-{date}.pdf"
   show_match_reasons: true
   show_visible_urls: false
   show_access_warnings: true
-  restricted_badge_text: "PAYWALLED/RESTRICTED"
 
 network:
   user_agent: "MyNews/0.1 (personal news digest)"

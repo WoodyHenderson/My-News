@@ -25,6 +25,7 @@ def overlaps(span: tuple[int, int], spans: list[tuple[int, int]]) -> bool:
 def rank_articles(
     articles: dict[str, ArticleContent],
     config_path: Path = _DEFAULT_CONFIG,
+    max_articles_override: int | None = None,
 ) -> list[tuple[str, RankedArticle]]:
     """
     This function is here to rank articles after they have been scored, will return a dict
@@ -36,7 +37,16 @@ def rank_articles(
         config = yaml.safe_load(f)
     digest = config.get("digest", {})
     minimum_score = digest.get("minimum_score", 1.0)
-    max_articles = digest.get("max_articles", 30)
+    if max_articles_override == 0:
+        max_articles: int | None = None
+    else:
+        max_articles = (
+            max_articles_override
+            if max_articles_override is not None
+            else digest.get("max_articles", 30)
+        )
+        if max_articles < 1:
+            raise ValueError("max_articles must be >= 1")
 
     above_minimum = []
     for url, r in ranked_articles.items():
@@ -55,6 +65,8 @@ def rank_articles(
         return (-ranked.score, timestamp, normalise_for_matching(ranked.article.title))
 
     above_minimum.sort(key=sort_key)
+    if max_articles is None:
+        return above_minimum
     return above_minimum[:max_articles]
 
 def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEFAULT_CONFIG) -> dict[str, RankedArticle]:

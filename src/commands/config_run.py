@@ -53,6 +53,7 @@ def run_application(
     config_path: Path,
     output_path: Path | None = None,
     on_progress: Callable[[str, str], None] | None = None,
+    max_articles_override: int | None = None,
 ) -> None:
     """
     Run the application with the specified configuration file and output path.
@@ -105,7 +106,11 @@ def run_application(
         raise ConfigRunError(f"Failed to compare against previously seen articles: {e}") from e
     try:
         progress(f"Scoring and ranking {len(article_data)} articles based on your preferences...")
-        ranked_articles = rank_articles(article_data, config_path)
+        ranked_articles = rank_articles(
+            article_data,
+            config_path,
+            max_articles_override=max_articles_override,
+        )
         progress(
             f"Successfully scored {len(article_data)} articles and selected "
             f"{len(ranked_articles)} for the digest",

@@ -1,8 +1,8 @@
 # My News
 
-I wanted a small headless app that gives me recent news I am actually interested in, from sources I have chosen to trust. My News fetches articles from configured RSS feeds, works out how well they match my interests, and generates a ranked PDF digest with links back to the original articles.
+I wanted a small headless app that gives me recent news I am actually interested in, from sources I have chosen to trust. My News fetches articles from configured RSS feeds, works out how well they match my interests, and generates a ranked digest with links back to the original articles, this is accessible as either an HTML viewable in app in a Chromium widget or can be exported to a set location as a PDF.
 
-It is basically a very small personal search engine for news, driven by one YAML file and one command.
+It is basically a very small personal search engine for news, driven by one YAML config file that is self-curated.
 
 The scoring algorithm actually ended up curating interesting stuff often enough to where I am going to expand to include a head as there is a lot of useful functionality that can be added to make QoL and reusability better.
 
