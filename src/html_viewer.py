@@ -18,6 +18,11 @@ else:
     _WEBENGINE_IMPORT_ERROR = None
 
 
+class SeenBridge(QObject):
+    @pyqtSlot(str, result=bool)
+    def markSeen(self, url: str) -> bool:
+        return mark_seen(url)
+
 class HtmlViewerWindow(QMainWindow):
     """Simple Chromium-backed window for viewing generated digest HTML."""
 
