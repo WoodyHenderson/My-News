@@ -98,7 +98,7 @@ def run_application(
         raise ConfigRunError(f"Failed to normalise and validate articles: {e}") from e
     try:
         progress(f"Comparing against previously seen articles...")
-        ranked_articles = compare_to_seen(ranked_articles)
+        article_data = compare_to_seen(article_data)
         progress(f"Successfully compared against previously seen articles", "success")
     except Exception as e:
         progress(f"Failed to compare against previously seen articles: {e}", "error")
