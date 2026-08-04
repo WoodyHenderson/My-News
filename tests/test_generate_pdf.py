@@ -4,7 +4,7 @@ from pypdf import PdfReader
 
 from src.models.article_content import ArticleContent
 from src.models.ranked_article import RankedArticle
-from src.pdf.generate_pdf import generate_pdf
+from src.output_generation.generate_pdf import generate_pdf
 
 
 def test_generate_pdf_sorts_by_score_and_includes_article_details(tmp_path):
