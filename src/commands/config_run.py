@@ -9,6 +9,7 @@ from src.models.article_content import ArticleContent
 from src.normalise import normalise_validate_articles
 from src.ranking import rank_articles
 from src.output_generation.generate_digest import generate_digest
+from src.compare_to_db import compare_to_seen
 
 '''
 What run should include:
@@ -95,6 +96,13 @@ def run_application(
     except Exception as e:
         progress(f"Failed to normalise and validate articles: {e}", "error")
         raise ConfigRunError(f"Failed to normalise and validate articles: {e}") from e
+    try:
+        progress(f"Comparing against previously seen articles...")
+        ranked_articles = compare_to_seen(ranked_articles)
+        progress(f"Successfully compared against previously seen articles", "success")
+    except Exception as e:
+        progress(f"Failed to compare against previously seen articles: {e}", "error")
+        raise ConfigRunError(f"Failed to compare against previously seen articles: {e}") from e
     try:
         progress(f"Scoring and ranking {len(article_data)} articles based on your preferences...")
         ranked_articles = rank_articles(article_data, config_path)

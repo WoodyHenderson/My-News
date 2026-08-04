@@ -7,28 +7,6 @@ import urllib.parse
 def db_connect() -> sqlite3.Connection:
     return sqlite3.connect("seen_articles.db")
 
-def create_tables() -> None:
-    with db_connect() as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS seen_articles (
-                canonical_url TEXT PRIMARY KEY
-            )
-            """
-        )
-        conn.commit()
-
-def mark_seen(url: str) -> bool:
-    create_tables()
-    with db_connect() as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT OR IGNORE INTO seen_articles (canonical_url) VALUES (?)",
-            (canonicalise_url(url),),
-        )
-        conn.commit()
-        return cursor.rowcount > 0
 
 def canonicalise_url(url: str) -> str:
     """
@@ -43,3 +21,41 @@ def canonicalise_url(url: str) -> str:
     )
     rebuilt = urllib.parse.urlunsplit(cleaned)
     return rebuilt
+
+
+def create_tables() -> None:
+    with db_connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS seen_articles (
+                canonical_url TEXT PRIMARY KEY
+            )
+            """
+        )
+        conn.commit()
+
+def mark_seen(url: str) -> bool:
+    create_tables()
+    canonical_url = canonicalise_url(url)
+    with db_connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT OR IGNORE INTO seen_articles (canonical_url) VALUES (?)",
+            (canonical_url,),
+        )
+        conn.commit()
+        return cursor.rowcount > 0
+
+def is_seen(url: str) -> bool:
+    create_tables()
+    canonical_url = canonicalise_url(url)
+    with db_connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT 1 FROM seen_articles WHERE canonical_url = ?",
+            (canonical_url,),
+        )
+        if cursor.fetchone():
+            return True
+        return False
