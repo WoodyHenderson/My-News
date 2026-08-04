@@ -18,3 +18,8 @@
 ## 4. Expanding sources and use archive?
 
 - Need to expand to more sources and could perhaps use archive as a way to bypass paywalled content, need to look into how I could get from a website to archive to an rss feed? Seems relatively difficult but a possible stretch goal for fun.
+
+## 5. Re-use PDF generation content
+
+- Since I got rid of PDF generation in favour of an HTML to chromium widget presentation, the PDF generator content is currently not in use, whilst I can just get rid of it it seems a waste so going to rework it just into a button beside the digest chooser that allows people to export it as a PDF. 
+- Now that I think about it it might also be wise to include a widget beside the digest that allows people to change their output directory like they can in the CLI.

@@ -136,11 +136,6 @@ class MainWindow(QMainWindow):
         section_label.setObjectName("sectionLabel")
         content_layout.addWidget(section_label)
 
-        section_title = QLabel("Today’s reading, ready when you are.")
-        section_title.setObjectName("sectionTitle")
-        section_title.setWordWrap(True)
-        content_layout.addWidget(section_title)
-
         selector_label = QLabel("EDITION")
         selector_label.setObjectName("fieldLabel")
         content_layout.addSpacing(34)
