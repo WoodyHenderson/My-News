@@ -5,10 +5,10 @@ from pathlib import Path
 from typing import Annotated, Optional
 
 from src.commands.config_init import ConfigInitError, initialize_config
+from src.commands.command_mark_seen import mark_seen_url
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
 from src.commands.config_run import ConfigRunError, run_application
 from src.gui import main as run_gui
-from src.seen_articles import canonicalise_url, mark_seen
 
 """ CLI that we will use for interacting with the app. """
 
@@ -82,8 +82,7 @@ def markseen(
     url: Annotated[str, typer.Argument(help="Article URL to mark as seen")],
 ) -> None:
     """Mark an article URL as seen so it can be filtered from future digests."""
-    inserted = mark_seen(url)
-    canonical_url = canonicalise_url(url)
+    inserted, canonical_url = mark_seen_url(url)
     if inserted:
         typer.secho(f"Marked as seen: {canonical_url}", fg="green")
     else:

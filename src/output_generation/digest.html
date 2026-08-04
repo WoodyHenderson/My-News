@@ -19,7 +19,17 @@
 		{% if articles %}
 			{% for url, ranked in articles %}
 				<article>
-					<h2>{{ loop.index }}. {{ ranked.article.title }}</h2>
+					<div class="article-header">
+						<h2>{{ loop.index }}. {{ ranked.article.title }}</h2>
+						<button
+							type="button"
+							class="mark-seen-button"
+							data-url="{{ url }}"
+							aria-label="Mark this article as seen"
+							>
+							Mark as seen
+						</button>
+					</div>
 					<p class="metadata">
 						Score {{ "%.2f" | format(ranked.score) }}
 						&middot; {{ ranked.article.source_id }}
