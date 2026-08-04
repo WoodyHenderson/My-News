@@ -4,6 +4,8 @@ I wanted a small headless app that gives me recent news I am actually interested
 
 It is basically a very small personal search engine for news, driven by one YAML file and one command.
 
+The scoring algorithm actually ended up curating interesting stuff often enough to where I am going to expand to include a head as there is a lot of useful functionality that can be added to make QoL and reusability better.
+
 P.S. It also ended up pulling from sources like BBC iPlayer, originally I felt like this was some weird bug but I think its just because sites will tend to refer to their other resources on their news pages and I was going to make a patch for this but after thinking about it I actually think its kind of a neat side effect (feature not bug).
 
 ## Setup
