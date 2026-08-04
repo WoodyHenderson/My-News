@@ -1,6 +1,6 @@
 # List of things to implement in the future:
 
-## 1. Creating a head
+## 1. Creating a head ✅
 
 - Need to actually make a head to implement the features that I want in the future, setting stuff via commands initially is ok because there aren't that many but in the future when I need a bunch of interaction I'll need a head.
 - Should allow users to validate config and run the app from the head as well and probably view the output within the head too.

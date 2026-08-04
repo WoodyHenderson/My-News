@@ -8,6 +8,7 @@ from src.commands.config_init import ConfigInitError, initialize_config
 from src.commands.config_validation import ConfigValidationError, load_and_validate_config
 from src.commands.config_run import ConfigRunError, run_application
 from src.fetch_articles import fetch_articles
+from src.gui import main as run_gui
 
 """ CLI that we will use for interacting with the app. """
 
@@ -75,6 +76,13 @@ def run(
         typer.secho(str(e), fg="red")
         raise typer.Exit(code=1)
     typer.secho(f"Configuration file {config} loaded successfully.", fg="green")
+
+@app.command()
+def opengui() -> None:
+    """
+    Open the GUI for the application.
+    """
+    run_gui()
 
 if __name__ == "__main__":
     app()
