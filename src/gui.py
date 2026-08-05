@@ -23,6 +23,7 @@ from PyQt6.QtWidgets import (
 )
 
 from src.html_viewer import HtmlViewerWindow
+from src.output_generation.generate_digest import _write_pdf
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
@@ -227,6 +228,16 @@ class MainWindow(QMainWindow):
         self.view_button.setMinimumHeight(50)
         self.view_button.clicked.connect(self.view_selected_output)
         action_row.addWidget(self.view_button)
+
+        self.as_pdf_button = QPushButton("Export PDF")
+        self.as_pdf_button.setObjectName("asPdfButton")
+        self.as_pdf_button.setIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_DialogSaveButton)
+        )
+        self.as_pdf_button.setIconSize(QSize(18, 18))
+        self.as_pdf_button.setMinimumHeight(50)
+        self.as_pdf_button.clicked.connect(self.export_selected_output_as_pdf)
+        action_row.addWidget(self.as_pdf_button)
 
         action_row.addStretch()
         content_layout.addLayout(action_row)
@@ -484,6 +495,24 @@ class MainWindow(QMainWindow):
         self._run_thread.finished.connect(self._cleanup_run_thread)
 
         self._run_thread.start()
+
+    def export_selected_output_as_pdf(self) -> None:
+        selected = self.selected_output()
+        if selected is None:
+            self.run_status.setText("No digest selected to export.")
+            return
+
+        if not selected.exists():
+            self.run_status.setText("Selected digest no longer exists. Refreshing list...")
+            self.refresh_outputs()
+            return
+
+        pdf_output_path = selected.with_suffix(".pdf")
+        try:
+            _write_pdf(selected.read_text(encoding="utf-8"), pdf_output_path)
+            self.run_status.setText(f"Exported PDF: {pdf_output_path.name}")
+        except Exception as exc:
+            self.run_status.setText(f"Failed to export PDF: {exc}")
 
     def view_selected_output(self) -> None:
         selected = self.selected_output()

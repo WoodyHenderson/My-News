@@ -63,7 +63,7 @@ def generate_digest(
     *,
     digest_config: Mapping[str, object] | None = None,
 ) -> Path:
-    """Render a simple PDF digest ordered from highest to lowest score."""
+    """Render a simple digest ordered from highest to lowest score."""
     config = digest_config or {}
 
     if output_path is None:

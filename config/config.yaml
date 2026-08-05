@@ -269,3 +269,27 @@ sources:
       - "general-news"
     fetch_article: "auto"
 
+  - id: "cnbc-front-page"
+    name: "CNBC - Front Page"
+    enabled: true
+    kind: "feed"
+    url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+    site_url: "https://www.cnbc.com/"
+    priority_boost: 0.5
+    interests:
+      - "general-news"
+      - "finance"
+    fetch_article: "auto"
+
+  - id: "cnbc-technology"
+    name: "CNBC - Technology"
+    enabled: true
+    kind: "feed"
+    url: "https://www.cnbc.com/id/19854910/device/rss/rss.html"
+    site_url: "https://www.cnbc.com/technology/"
+    priority_boost: 0.1
+    interests:
+      - "general-news"
+      - "gaming"
+      - "ai"
+    fetch_article: "auto"
