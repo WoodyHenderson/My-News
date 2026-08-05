@@ -82,10 +82,17 @@ def run_application(
         raise ConfigRunError(f"Failed to gather sources from configuration: {e}") from e
     try:
         progress(f"Fetching articles from {len(sources)} sources...")
-        max_articles_per_source = config_data.get("network", {}).get(
+        network_config = config_data.get("network", {})
+        max_articles_per_source = network_config.get(
             "max_article_fetches_per_source", 20
         )
-        article_data = fetch_articles(sources, max_articles_per_source)
+        article_data = fetch_articles(
+            sources,
+            max_articles_per_source,
+            user_agent=network_config.get("user_agent"),
+            connect_timeout_seconds=network_config.get("connect_timeout_seconds", 10),
+            read_timeout_seconds=network_config.get("read_timeout_seconds", 20),
+        )
         progress(f"Successfully fetched {len(article_data)} articles", "success")
     except Exception as e:
         progress(f"Failed to fetch articles: {e}", "error")

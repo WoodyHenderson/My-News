@@ -42,13 +42,28 @@ class FetchArticlesError(RuntimeError):
 def fetch_articles(
     sources: list[dict[str, Any]],
     max_articles_per_source: int = 20,
+    user_agent: str | None = None,
+    connect_timeout_seconds: float = 10,
+    read_timeout_seconds: float = 20,
 ) -> dict[str, ArticleContent]:
     """Fetch linked articles from each enabled RSS source."""
     articles: dict[str, ArticleContent] = {}
     failures: list[str] = []
     ssl_context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    headers = {"User-Agent": user_agent} if user_agent else None
+    timeout = httpx.Timeout(
+        connect=connect_timeout_seconds,
+        read=read_timeout_seconds,
+        write=read_timeout_seconds,
+        pool=connect_timeout_seconds,
+    )
 
-    with httpx.Client(verify=ssl_context, follow_redirects=True, timeout=20) as client:
+    with httpx.Client(
+        verify=ssl_context,
+        follow_redirects=True,
+        timeout=timeout,
+        headers=headers,
+    ) as client:
         for source in sources:
             if not source.get("enabled", True):
                 continue
