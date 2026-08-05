@@ -87,13 +87,13 @@ interests:
 
   - id: "ai"
     label: "Artificial intelligence"
-    weight: 0.5
+    weight: 0.25
     phrases:
-      "artificial intelligence": 2.0
-      "generative AI": 2.0
-      "large language model": 2.0
-      "machine learning": 1.5
-      "deep learning": 1.5
+      "artificial intelligence": 1.2
+      "generative AI": 1.2
+      "large language model": 1.2
+      "machine learning": 1.1
+      "deep learning": 1.1
     terms:
       "AI": 1.0
       "LLM": 1.0
@@ -114,6 +114,7 @@ interests:
       "portfolio management": 1.5
     terms:
       "stocks": 1.0
+      "stock": 1.0
       "bonds": 1.0
       "mutual funds": 1.0
       "exchange-traded funds": 1.0
@@ -239,7 +240,7 @@ sources:
     kind: "feed"
     url: "https://www.propublica.org/feeds/propublica/main"
     site_url: "https://www.propublica.org"
-    priority_boost: 0.3
+    priority_boost: 0.5
     interests:
       - "general-news"
     fetch_article: "auto"
@@ -250,7 +251,7 @@ sources:
     name: "Associated Press - Front Page"
     enabled: true
     kind: "feed"
-    url: "https://rsshub.app/apnews/topics"
+    url: "https://news.google.com/rss/search?q=site%3Aapnews.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
     site_url: "https://apnews.com/"
     priority_boost: 0.5
     interests:
@@ -261,7 +262,7 @@ sources:
     name: "Reuters - Front Page"
     enabled: true
     kind: "feed"
-    url: "https://rsshub.app/reuters/world"
+    url: "https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
     site_url: "https://www.reuters.com/"
     priority_boost: 0.5
     interests:
