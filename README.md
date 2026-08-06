@@ -27,9 +27,7 @@ my-news validate
 my-news run
 ```
 
-The digest is written to `output/` by default as a PDF. If WeasyPrint cannot run on your machine,
-you can still generate the same digest as HTML by choosing an `.html` output path, or let the
-app fall back automatically when PDF rendering fails:
+The digest is written to /output as a .html and then can be viewed either in the in built chromium widget in the GUI, the integrated browser in your IDE if it contains one or simply opening it in your default browser.
 
 ```bash
 my-news run --config example.yaml --output output/my-digest.pdf
