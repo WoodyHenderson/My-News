@@ -40,6 +40,8 @@ my-news run --config example.yaml --output output/my-digest.html # You can open 
 
 The YAML controls which sources are enabled, which interests apply to each source, how strongly terms and phrases should be weighted, and things like the lookback window and maximum number of articles.
 
-Articles are scored using a slightly bastardised BM25 algorithm. Matches in titles and article bodies are weighted separately, then source priority and recency are added before the best results are put into the PDF. This lets me heavily favour something specific like gaming while only giving something noisy like AI a slight boost.
+Articles are scored using a slightly bastardised BM25 algorithm. Matches in titles and article bodies are weighted separately, then source priority and recency are added before the best results are put into the digest. This lets me heavily favour something specific like gaming while only giving something noisy like AI a slight boost. 
 
-The project currently uses feeds from sources including the BBC, The Guardian, ProPublica, AP and Reuters. Some feeds use RSSHub and may depend on the availability of its public service. May (probably will) continue to maintain and update the config for myself and might make the occasional change here and there in general when I find reliable sources I want to use or new topics im interested in.
+Articles that the user has "Marked as Seen" are populated to a local SQlite3 database instance and then filtered out before ranking happens.
+
+The project currently uses feeds from sources including the BBC, The Guardian, ProPublica, AP and Reuters. Some sources use google news' RSS services as they don't have their own publicly available RSS feeds or require a paid API key for this service. May (probably will) continue to maintain and update the config for myself and might make the occasional change here and there in general when I find reliable sources I want to use or new topics I am interested in.
