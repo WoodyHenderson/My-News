@@ -17,6 +17,10 @@ body {
 	margin: 0;
 }
 
+main {
+	max-width: 960px;
+}
+
 header {
 	border-bottom: 1pt solid #999999;
 	margin-bottom: 6mm;
@@ -48,6 +52,7 @@ article {
 	flex: 1;
 }
 
+.mark-seen-button,
 .mark-seen-btn {
 	border: 1px solid #b8b8b8;
 	background: #fff;
@@ -59,9 +64,15 @@ article {
 	white-space: nowrap;
 }
 
+.mark-seen-button:disabled,
 .mark-seen-btn:disabled {
 	opacity: 0.7;
 	cursor: default;
+}
+
+.mark-seen-button:hover,
+.mark-seen-btn:hover {
+	background: #f4f6f8;
 }
 
 h2 {
@@ -85,4 +96,76 @@ h2 {
 
 a {
 	color: #174f78;
+}
+
+@media screen {
+	body {
+		background: #f4f6f8;
+		font-size: 16px;
+		line-height: 1.6;
+		padding: 24px 16px 40px;
+	}
+
+	header,
+	main {
+		background: #ffffff;
+		border: 1px solid #e2e8ee;
+		border-radius: 12px;
+		box-shadow: 0 8px 20px rgba(22, 34, 45, 0.05);
+		max-width: 960px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	header {
+		padding: 20px 22px;
+		margin-bottom: 16px;
+		border-bottom: 1px solid #e2e8ee;
+	}
+
+	h1 {
+		font-size: 2rem;
+		line-height: 1.2;
+	}
+
+	header p {
+		margin: 0;
+		color: #4c5d6e;
+		font-size: 0.95rem;
+	}
+
+	main {
+		padding: 8px 14px 10px;
+	}
+
+	article {
+		border: 1px solid #e4ebf1;
+		border-radius: 10px;
+		padding: 14px 16px;
+		margin: 10px 0;
+		background: #fbfdff;
+	}
+
+	h2 {
+		font-size: 1.2rem;
+		margin: 0;
+	}
+
+	.metadata,
+	.url,
+	.matches {
+		font-size: 0.92rem;
+	}
+
+	.metadata {
+		margin-top: 6px;
+	}
+
+	.mark-seen-button,
+	.mark-seen-btn {
+		padding: 6px 12px;
+		border-radius: 8px;
+		font-size: 0.86rem;
+		border-color: #c7d4df;
+	}
 }
