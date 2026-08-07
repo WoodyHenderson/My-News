@@ -6,3 +6,4 @@ env/
 
 seen_articles.db
 output/
+.DS_Store

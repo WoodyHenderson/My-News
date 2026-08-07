@@ -25,6 +25,7 @@ The active configuration lives at `config/config.yaml`, with `example.yaml` kept
 ```bash
 my-news validate
 my-news run
+my-news opengui
 ```
 
 The digest is written to /output as a .html and then can be viewed either in the in built chromium widget in the GUI, the integrated browser in your IDE if it contains one or simply opening it in your default browser.
