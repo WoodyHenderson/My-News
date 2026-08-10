@@ -9,11 +9,23 @@
 	}
 }
 
+:root {
+	--ink: #1f1b17;
+	--muted-ink: #595147;
+	--rule: #b9b0a5;
+	--paper: #f8f3e8;
+	--paper-shadow: #efe6d6;
+	--accent: #2d4b66;
+	--font-headline: "Bodoni MT", "Didot", "Times New Roman", serif;
+	--font-body: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
 body {
-	color: #222222;
-	font-family: Georgia, "Times New Roman", serif;
+	color: var(--ink);
+	font-family: var(--font-body);
 	font-size: 10pt;
-	line-height: 1.4;
+	line-height: 1.45;
+	letter-spacing: 0.01em;
 	margin: 0;
 }
 
@@ -22,21 +34,35 @@ main {
 }
 
 header {
-	border-bottom: 1pt solid #999999;
+	border-bottom: 2pt double var(--rule);
 	margin-bottom: 6mm;
-	padding-bottom: 4mm;
+	padding-bottom: 3.5mm;
 }
 
 h1 {
-	font-size: 22pt;
+	font-family: var(--font-headline);
+	font-size: 28pt;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	line-height: 1.05;
+	text-transform: uppercase;
+	text-wrap: balance;
 	margin: 0 0 2mm;
 }
 
+header p {
+	color: var(--muted-ink);
+	font-size: 9pt;
+	letter-spacing: 0.06em;
+	margin: 0;
+	text-transform: uppercase;
+}
+
 article {
-	border-bottom: 0.5pt solid #cccccc;
+	border-bottom: 0.5pt solid var(--rule);
 	break-inside: avoid;
 	margin-bottom: 5mm;
-	padding-bottom: 5mm;
+	padding-bottom: 4mm;
 	page-break-inside: avoid;
 }
 
@@ -54,12 +80,15 @@ article {
 
 .mark-seen-button,
 .mark-seen-btn {
-	border: 1px solid #b8b8b8;
-	background: #fff;
-	color: #333;
-	border-radius: 4px;
+	border: 0.75pt solid #8d8377;
+	background: transparent;
+	color: #4e453b;
+	border-radius: 0;
 	padding: 4px 10px;
-	font-size: 9pt;
+	font-family: var(--font-body);
+	font-size: 8.5pt;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
 	cursor: pointer;
 	white-space: nowrap;
 }
@@ -72,18 +101,22 @@ article {
 
 .mark-seen-button:hover,
 .mark-seen-btn:hover {
-	background: #f4f6f8;
+	background: #f4ede0;
 }
 
 h2 {
-	font-size: 14pt;
+	font-size: 14.5pt;
+	font-weight: 600;
+	line-height: 1.25;
+	text-wrap: pretty;
 	margin: 0 0 2mm;
 	overflow-wrap: anywhere;
 }
 
 .metadata {
-	color: #555555;
+	color: var(--muted-ink);
 	font-size: 9pt;
+	letter-spacing: 0.02em;
 	margin: 0 0 2mm;
 }
 
@@ -94,78 +127,102 @@ h2 {
 	overflow-wrap: anywhere;
 }
 
+.matches {
+	font-style: italic;
+}
+
 a {
-	color: #174f78;
+	color: var(--accent);
+	text-decoration-thickness: 0.7px;
+	text-underline-offset: 1.5px;
 }
 
 @media screen {
 	body {
-		background: #f4f6f8;
+		background:
+			radial-gradient(circle at 20% 8%, rgba(228, 216, 196, 0.35) 0 26%, transparent 30%),
+			radial-gradient(circle at 82% 18%, rgba(223, 210, 188, 0.25) 0 24%, transparent 30%),
+			linear-gradient(180deg, #f3ead9 0%, #efe6d5 100%);
 		font-size: 16px;
-		line-height: 1.6;
+		line-height: 1.55;
 		padding: 24px 16px 40px;
 	}
 
 	header,
 	main {
-		background: #ffffff;
-		border: 1px solid #e2e8ee;
-		border-radius: 12px;
-		box-shadow: 0 8px 20px rgba(22, 34, 45, 0.05);
+		background: var(--paper);
+		border: 1px solid #d8cebc;
+		border-radius: 2px;
+		box-shadow: 0 18px 40px rgba(51, 36, 18, 0.08), 0 2px 0 var(--paper-shadow);
 		max-width: 960px;
 		margin-left: auto;
 		margin-right: auto;
 	}
 
 	header {
-		padding: 20px 22px;
-		margin-bottom: 16px;
-		border-bottom: 1px solid #e2e8ee;
+		padding: 20px 26px 16px;
+		margin-bottom: 10px;
+		border-bottom: 2px double var(--rule);
 	}
 
 	h1 {
-		font-size: 2rem;
+		font-size: clamp(1.8rem, 4.8vw, 2.6rem);
 		line-height: 1.2;
 	}
 
 	header p {
-		margin: 0;
-		color: #4c5d6e;
-		font-size: 0.95rem;
+		font-size: 0.78rem;
 	}
 
 	main {
-		padding: 8px 14px 10px;
+		padding: 10px 24px 14px;
 	}
 
 	article {
-		border: 1px solid #e4ebf1;
-		border-radius: 10px;
-		padding: 14px 16px;
-		margin: 10px 0;
-		background: #fbfdff;
+		border: 0;
+		border-bottom: 1px solid var(--rule);
+		padding: 14px 0 16px;
+		margin: 0;
+		background: transparent;
 	}
 
 	h2 {
-		font-size: 1.2rem;
+		font-size: 1.32rem;
 		margin: 0;
 	}
 
 	.metadata,
 	.url,
 	.matches {
-		font-size: 0.92rem;
+		font-size: 0.89rem;
 	}
 
 	.metadata {
-		margin-top: 6px;
+		margin-top: 5px;
 	}
 
 	.mark-seen-button,
 	.mark-seen-btn {
 		padding: 6px 12px;
-		border-radius: 8px;
-		font-size: 0.86rem;
-		border-color: #c7d4df;
+		font-size: 0.75rem;
+		border-color: #978b7d;
+	}
+}
+
+@media screen and (max-width: 760px) {
+	.article-header {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.mark-seen-button,
+	.mark-seen-btn {
+		align-self: flex-start;
+	}
+
+	main,
+	header {
+		padding-left: 16px;
+		padding-right: 16px;
 	}
 }
