@@ -438,6 +438,7 @@ class MainWindow(QMainWindow):
     def refresh_outputs(self) -> None:
         selected_path = self.selected_output()
         outputs = discover_html_outputs(self.output_dir)
+        most_recent = outputs[0] if outputs else None
 
         self.output_selector.clear()
         if not outputs:
@@ -458,7 +459,7 @@ class MainWindow(QMainWindow):
             )
 
         if selected_path is not None:
-            selected_index = self.output_selector.findData(str(selected_path.resolve()))
+            selected_index = self.output_selector.findData(str(most_recent.resolve()))
             if selected_index >= 0:
                 self.output_selector.setCurrentIndex(selected_index)
 
