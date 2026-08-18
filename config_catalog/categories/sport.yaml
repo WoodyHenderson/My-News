@@ -1,0 +1,44 @@
+- id: "sport"
+  label: "Sport and sporting events"
+  weight: 0.75
+  phrases:
+    "sports news": 1.0
+    "sporting event": 0.75
+    "football match": 1.0
+    "football league": 0.75
+    "world cup": 1.5
+    "champions league": 1.25
+    "premier league": 1.0
+    "six nations": 1.0
+    "grand slam": 1.0
+    "formula one": 1.0
+    "motor racing": 0.75
+    "olympic games": 1.25
+  terms:
+    "sport": 0.5
+    "sports": 0.5
+    "athlete": 0.75
+    "athletes": 0.75
+    "football": 0.9
+    "soccer": 0.9
+    "rugby": 0.9
+    "cricket": 0.9
+    "tennis": 0.9
+    "golf": 0.9
+    "boxing": 0.9
+    "cycling": 0.75
+    "athletics": 0.75
+    "basketball": 0.9
+    "baseball": 0.9
+    "hockey": 0.9
+    "Formula 1": 1.0
+    "F1": 1.0
+    "Olympics": 1.0
+    "medal": 0.75
+    "championship": 0.75
+    "tournament": 0.75
+    "manager": 0.5
+    "coach": 0.5
+    "transfer": 0.75
+  required_any: []
+  excluded: []

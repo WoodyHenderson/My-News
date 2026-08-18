@@ -1,0 +1,70 @@
+- id: "world"
+  label: "International news and geopolitics"
+  weight: 0.75
+  phrases:
+    "international news": 1.0
+    "foreign policy": 1.0
+    "international relations": 1.0
+    "global affairs": 0.9
+    "world leaders": 0.9
+    "trade agreement": 0.8
+    "trade war": 1.0
+    "military alliance": 1.0
+    "peace talks": 0.9
+    "ceasefire agreement": 1.0
+    "United Nations": 1.0
+    "European Union": 1.1
+    "NATO alliance": 1.0
+  terms:
+    "international": 0.75
+    "geopolitics": 1.0
+    "diplomacy": 0.9
+    "diplomatic": 0.8
+    "sanctions": 0.9
+    "embassy": 0.75
+    "summit": 0.8
+    "refugees": 0.75
+    "migration": 0.75
+    "conflict": 0.8
+    "war": 0.8
+    "ceasefire": 0.9
+    "military": 0.8
+    "NATO": 1.0
+    "United Nations": 1.0
+    "UN": 0.9
+    "United States": 1.1
+    "USA": 1.1
+    "America": 1.0
+    "China": 1.1
+    "Chinese": 1.0
+    "Japan": 1.0
+    "Japanese": 0.9
+    "Europe": 1.1
+    "European": 1.0
+    "European Union": 1.1
+    "EU": 1.0
+    "United Kingdom": 1.0
+    "Britain": 0.9
+    "British": 0.9
+    "Germany": 1.0
+    "France": 1.0
+    "Russia": 1.0
+    "Russian": 0.9
+    "India": 0.95
+    "South Korea": 0.9
+    "Canada": 0.85
+    "Australia": 0.85
+    "Africa": 0.6
+    "African": 0.6
+    "Nigeria": 0.65
+    "Kenya": 0.6
+    "South Africa": 0.7
+    "Ethiopia": 0.6
+    "Sudan": 0.65
+    "Somalia": 0.6
+    "Middle East": 0.8
+    "Latin America": 0.7
+    "South America": 0.7
+    "Southeast Asia": 0.75
+  required_any: []
+  excluded: []

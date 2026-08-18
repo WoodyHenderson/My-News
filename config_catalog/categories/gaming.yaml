@@ -1,0 +1,26 @@
+  - id: "gaming"
+    label: "Video games and the games industry"
+    weight: 3.0
+    phrases:
+      "video game": 3.0
+      "video games": 3.0
+      "games industry": 2.5
+      "gaming industry": 2.5
+      "game developer": 2.5
+      "game development": 2.5
+      "game studio": 2.5
+      "gaming console": 2.0
+      "game release": 2.0
+    terms:
+      "gaming": 3.0
+      "videogame": 3.0
+      "esports": 2.5
+      "PlayStation": 2.0
+      "Xbox": 2.0
+      "Valve": 3.0
+      "Ubisoft": 1.5
+      "CD Projekt": 2.5
+      "Rockstar": 2.5
+      "Steam": 3.0
+    required_any: []
+    excluded: []

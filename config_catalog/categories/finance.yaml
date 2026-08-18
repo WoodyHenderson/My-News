@@ -1,0 +1,19 @@
+  - id: "finance"
+    label: "Finance and investing"
+    weight: 1.0
+    phrases:
+      "stock market": 2.0
+      "financial markets": 2.0
+      "investment strategy": 1.5
+      "portfolio management": 1.5
+    terms:
+      "stocks": 1.0
+      "stock": 1.0
+      "bonds": 1.0
+      "mutual funds": 1.0
+      "exchange-traded funds": 1.0
+      "ETFs": 1.0
+      "commodities": 1.0
+      "forex": 1.0
+    required_any: []
+    excluded: []

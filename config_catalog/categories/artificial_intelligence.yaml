@@ -1,0 +1,18 @@
+  - id: "ai"
+    label: "Artificial intelligence"
+    weight: 0.25
+    phrases:
+      "artificial intelligence": 1.2
+      "generative AI": 1.2
+      "large language model": 1.2
+      "machine learning": 1.1
+      "deep learning": 1.1
+    terms:
+      "AI": 1.0
+      "LLM": 1.0
+      "ChatGPT": 1.0
+      "OpenAI": 1.0
+      "Anthropic": 1.0
+      "Gemini": 1.0
+    required_any: []
+    excluded: []

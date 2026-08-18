@@ -1,0 +1,58 @@
+- id: "uk"
+  label: "UK news and public life"
+  weight: 0.9
+  phrases:
+    "UK news": 1.0
+    "British government": 1.1
+    "UK government": 1.1
+    "British politics": 1.0
+    "general election": 1.1
+    "House of Commons": 1.2
+    "House of Lords": 1.1
+    "Prime Minister": 1.1
+    "10 Downing Street": 1.2
+    "UK economy": 1.0
+    "Bank of England": 1.2
+    "National Health Service": 1.1
+    "cost of living": 1.0
+    "Northern Ireland": 1.0
+    "Scottish independence": 1.0
+    "Welsh Government": 0.9
+    "local council": 0.75
+  terms:
+    "UK": 0.9
+    "Britain": 0.9
+    "British": 0.85
+    "England": 0.65
+    "Scotland": 0.8
+    "Wales": 0.8
+    "Westminster": 1.0
+    "Whitehall": 1.0
+    "government": 0.7
+    "minister": 0.7
+    "ministers": 0.7
+    "Parliament": 1.0
+    "MPs": 0.9
+    "Labour": 0.85
+    "Conservative": 0.85
+    "Tories": 0.8
+    "Liberal Democrats": 0.8
+    "Reform UK": 0.85
+    "SNP": 0.8
+    "election": 0.75
+    "referendum": 0.8
+    "NHS": 1.0
+    "healthcare": 0.7
+    "pound": 0.8
+    "sterling": 0.8
+    "inflation": 0.7
+    "economy": 0.7
+    "mortgage": 0.7
+    "railways": 0.75
+    "railway": 0.75
+    "strikes": 0.75
+    "council": 0.65
+    "devolution": 0.8
+    "Brexit": 0.9
+  required_any: []
+  excluded: []
