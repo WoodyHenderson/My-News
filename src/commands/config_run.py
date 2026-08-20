@@ -65,8 +65,17 @@ def run_application(
             on_progress(msg, level)
 
     try:
+        progress(f"Collating your chosen preferences and providers...")
+        provider_pref = None
+        category_pref = None
+        progress(f"Preferences collated successfully", "success")
+    except Exception as e:
+        progress(f"Failed to collate preferences: {e}", "error")
+        raise ConfigRunError(f"Failed to collate preferences: {e}") from e
+
+    try:
         progress("Loading and validating configuration...")
-        config_data = load_and_validate_config(config_path)
+        config_data = load_and_validate_config(config_path, provider_pref, category_pref)
         progress("Configuration validated successfully", "success")
     except ConfigValidationError as e:
         progress(f"Configuration validation failed: {e}", "error")

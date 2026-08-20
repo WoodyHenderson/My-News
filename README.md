@@ -20,7 +20,7 @@ python -m pip install -e .
 
 ## Using it
 
-The active configuration lives at `config/config.yaml`, with `example.yaml` kept as a useful starting point.
+The active configuration lives at `config/config.yaml`. Run `my-news init` to create it from the shared base at `config/default.yaml`; `example.yaml` is a fuller reference configuration.
 
 ```bash
 my-news validate
