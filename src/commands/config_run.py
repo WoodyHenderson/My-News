@@ -37,7 +37,6 @@ sources:
   # BBC publishes separate RSS feeds for each requested section.
   - id: "bbc-front-page"
     name: "BBC News - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://feeds.bbci.co.uk/news/rss.xml"
     site_url: "https://www.bbc.co.uk/news"

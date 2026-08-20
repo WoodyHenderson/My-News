@@ -37,7 +37,7 @@ my-news run --config example.yaml --output output/my-digest.html # You can open 
 
 ## Configuration and ranking
 
-The YAML controls which sources are enabled, which interests apply to each source, how strongly terms and phrases should be weighted, and things like the lookback window and maximum number of articles.
+The YAML controls which sources are included, which interests apply to each source, how strongly terms and phrases should be weighted, and things like the lookback window and maximum number of articles.
 
 Articles are scored using a slightly bastardised BM25 algorithm. Matches in titles and article bodies are weighted separately, then source priority and recency are added before the best results are put into the digest. This lets me heavily favour something specific like gaming while only giving something noisy like AI a slight boost. 
 

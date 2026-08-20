@@ -5,7 +5,6 @@
   feeds:
     - id: "front-page"
       name: "Front Page"
-      enabled: true
       kind: "feed"
       url: "https://www.theguardian.com/international/rss"
       site_url: "https://www.theguardian.com/international"
@@ -15,7 +14,6 @@
       categories: ["general-news", "world", "uk"]
     - id: "technology"
       name: "Technology"
-      enabled: true
       kind: "feed"
       url: "https://www.theguardian.com/uk/technology/rss"
       site_url: "https://www.theguardian.com/uk/technology"
@@ -25,7 +23,6 @@
       categories: ["technology", "artificial_intelligence"]
     - id: "business"
       name: "Business"
-      enabled: true
       kind: "feed"
       url: "https://www.theguardian.com/uk/business/rss"
       site_url: "https://www.theguardian.com/uk/business"
@@ -35,7 +32,6 @@
       categories: ["business"]
     - id: "politics"
       name: "Politics"
-      enabled: true
       kind: "feed"
       url: "https://www.theguardian.com/politics/rss"
       site_url: "https://www.theguardian.com/politics"

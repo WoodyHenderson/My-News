@@ -11,11 +11,11 @@ class ConfigValidationError(ValueError):
     """Raised when the configuration file is missing or invalid."""
 
 
-def load_and_validate_config(config_path: Path) -> dict[str, Any]:
+def load_and_validate_config(config_path: Path, provider_pref = ) -> dict[str, Any]:
     """Load and validate YAML configuration from disk."""
     if not config_path.exists():
         raise ConfigValidationError(
-            f"Configuration file {config_path} does not exist, try running 'mycli init' to create one."
+            f"Configuration file {config_path} does not exist, try running 'my-news init' to create one."
         )
 
     try:
