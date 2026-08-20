@@ -6,7 +6,7 @@ It is basically a very small personal search engine for news, driven by one YAML
 
 The scoring algorithm actually ended up curating interesting stuff often enough to where I am going to expand to include a head as there is a lot of useful functionality that can be added to make QoL and reusability better.
 
-P.S. It also ended up pulling from sources like BBC iPlayer, originally I felt like this was some weird bug but I think its just because sites will tend to refer to their other resources on their news pages and I was going to make a patch for this but after thinking about it I actually think its kind of a neat side effect (feature not bug).
+At this point the CLI is pretty much deprecated, it provided the basis of the functionality for moving forward but as its signficantly easier to port the changes to the GUI and easier to use as functionality has increased I won't be updating it much from here on (20/08/26)
 
 ## Setup
 
