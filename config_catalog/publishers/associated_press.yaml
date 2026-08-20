@@ -1,0 +1,15 @@
+- id: "ap"
+  name: "Associated Press"
+  description: "International news and reporting"
+  site_url: "https://apnews.com/"
+  feeds:
+    - id: "front-page"
+      name: "Front Page"
+      enabled: true
+      kind: "feed"
+      url: "https://news.google.com/rss/search?q=site%3Aapnews.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
+      site_url: "https://apnews.com/"
+      priority_boost: 0.5
+      interests: ["general-news"]
+      fetch_article: "auto"
+      categories: ["general-news"]

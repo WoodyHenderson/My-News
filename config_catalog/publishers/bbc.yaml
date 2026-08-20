@@ -1,0 +1,70 @@
+- id: "bbc"
+  name: "BBC News"
+  description: "UK and international news"
+  site_url: "https://www.bbc.co.uk/news"
+
+  feeds:
+    - id: "front-page"
+      name: "Front Page"
+      enabled: true
+      kind: "feed"
+      url: "https://feeds.bbci.co.uk/news/rss.xml"
+      site_url: "https://www.bbc.co.uk/news"
+      priority_boost: 0.5
+      interests:
+        - "general-news"
+        - "gaming"
+        - "ai"
+        - "finance"
+      fetch_article: "auto"
+      categories:
+        - "general-news"
+        - "world"
+        - "uk"
+
+    - id: "technology"
+      name: "Technology"
+      enabled: true
+      kind: "feed"
+      url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
+      site_url: "https://www.bbc.co.uk/news/technology"
+      priority_boost: 0.1
+      interests:
+        - "general-news"
+        - "gaming"
+        - "ai"
+      fetch_article: "auto"
+      categories:
+        - "technology"
+        - "artificial_intelligence"
+
+    - id: "politics"
+      name: "Politics"
+      enabled: true
+      kind: "feed"
+      url: "https://feeds.bbci.co.uk/news/politics/rss.xml"
+      site_url: "https://www.bbc.co.uk/news/politics"
+      priority_boost: 0.1
+      interests:
+        - "general-news"
+        - "gaming"
+        - "ai"
+      fetch_article: "auto"
+      categories:
+        - "uk"
+        - "general-news"
+
+    - id: "business"
+      name: "Business"
+      enabled: true
+      kind: "feed"
+      url: "https://feeds.bbci.co.uk/news/business/rss.xml"
+      site_url: "https://www.bbc.co.uk/news/business"
+      priority_boost: 0.1
+      interests:
+        - "general-news"
+        - "gaming"
+        - "ai"
+      fetch_article: "auto"
+      categories:
+        - "business"

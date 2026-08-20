@@ -1,0 +1,25 @@
+- id: "cnbc"
+  name: "CNBC"
+  description: "Business, markets, and technology news"
+  site_url: "https://www.cnbc.com/"
+  feeds:
+    - id: "front-page"
+      name: "Front Page"
+      enabled: true
+      kind: "feed"
+      url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+      site_url: "https://www.cnbc.com/"
+      priority_boost: 0.5
+      interests: ["general-news", "finance"]
+      fetch_article: "auto"
+      categories: ["business", "finance"]
+    - id: "technology"
+      name: "Technology"
+      enabled: true
+      kind: "feed"
+      url: "https://www.cnbc.com/id/19854910/device/rss/rss.html"
+      site_url: "https://www.cnbc.com/technology/"
+      priority_boost: 0.1
+      interests: ["general-news", "gaming", "ai"]
+      fetch_article: "auto"
+      categories: ["technology", "artificial_intelligence"]

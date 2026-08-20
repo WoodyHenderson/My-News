@@ -1,0 +1,58 @@
+- id: "business"
+  label: "Business, companies and industry"
+  weight: 0.9
+  phrases:
+    "business news": 1.0
+    "business growth": 0.8
+    "company earnings": 1.0
+    "quarterly results": 1.0
+    "corporate earnings": 1.0
+    "business deal": 0.9
+    "trade agreement": 0.8
+    "trade dispute": 0.9
+    "supply chain": 0.9
+    "labour market": 0.8
+    "job market": 0.8
+    "interest rates": 0.8
+    "cost of doing business": 0.9
+    "corporate restructuring": 1.0
+    "merger and acquisition": 1.0
+    "initial public offering": 1.0
+  terms:
+    "business": 0.7
+    "company": 0.7
+    "companies": 0.7
+    "corporate": 0.8
+    "industry": 0.75
+    "industries": 0.75
+    "enterprise": 0.7
+    "startup": 0.8
+    "startups": 0.8
+    "employer": 0.65
+    "employment": 0.65
+    "workers": 0.65
+    "jobs": 0.65
+    "manufacturing": 0.8
+    "retail": 0.8
+    "consumer": 0.7
+    "customers": 0.6
+    "revenue": 0.9
+    "profits": 0.9
+    "profit": 0.9
+    "earnings": 0.9
+    "sales": 0.7
+    "investment": 0.7
+    "investors": 0.7
+    "merger": 0.9
+    "acquisition": 0.9
+    "bankruptcy": 1.0
+    "insolvency": 1.0
+    "regulation": 0.7
+    "tariffs": 0.8
+    "exports": 0.7
+    "imports": 0.7
+    "supply chain": 0.8
+    "CEO": 0.8
+    "executive": 0.7
+  required_any: []
+  excluded: []

@@ -1,0 +1,15 @@
+- id: "reuters"
+  name: "Reuters"
+  description: "International news and business reporting"
+  site_url: "https://www.reuters.com/"
+  feeds:
+    - id: "front-page"
+      name: "Front Page"
+      enabled: true
+      kind: "feed"
+      url: "https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
+      site_url: "https://www.reuters.com/"
+      priority_boost: 0.5
+      interests: ["general-news"]
+      fetch_article: "auto"
+      categories: ["general-news", "business"]

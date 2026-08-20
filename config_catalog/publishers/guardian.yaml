@@ -1,0 +1,45 @@
+- id: "guardian"
+  name: "The Guardian"
+  description: "UK and international news"
+  site_url: "https://www.theguardian.com"
+  feeds:
+    - id: "front-page"
+      name: "Front Page"
+      enabled: true
+      kind: "feed"
+      url: "https://www.theguardian.com/international/rss"
+      site_url: "https://www.theguardian.com/international"
+      priority_boost: 0.5
+      interests: ["general-news", "gaming", "ai"]
+      fetch_article: "auto"
+      categories: ["general-news", "world", "uk"]
+    - id: "technology"
+      name: "Technology"
+      enabled: true
+      kind: "feed"
+      url: "https://www.theguardian.com/uk/technology/rss"
+      site_url: "https://www.theguardian.com/uk/technology"
+      priority_boost: 0.1
+      interests: ["general-news", "gaming", "ai"]
+      fetch_article: "auto"
+      categories: ["technology", "artificial_intelligence"]
+    - id: "business"
+      name: "Business"
+      enabled: true
+      kind: "feed"
+      url: "https://www.theguardian.com/uk/business/rss"
+      site_url: "https://www.theguardian.com/uk/business"
+      priority_boost: 0.1
+      interests: ["general-news", "gaming", "ai"]
+      fetch_article: "auto"
+      categories: ["business"]
+    - id: "politics"
+      name: "Politics"
+      enabled: true
+      kind: "feed"
+      url: "https://www.theguardian.com/politics/rss"
+      site_url: "https://www.theguardian.com/politics"
+      priority_boost: 0.1
+      interests: ["general-news", "gaming", "ai"]
+      fetch_article: "auto"
+      categories: ["uk", "general-news"]

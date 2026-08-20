@@ -1,0 +1,15 @@
+- id: "propublica"
+  name: "ProPublica"
+  description: "Investigative journalism"
+  site_url: "https://www.propublica.org"
+  feeds:
+    - id: "latest"
+      name: "Latest Investigations"
+      enabled: true
+      kind: "feed"
+      url: "https://www.propublica.org/feeds/propublica/main"
+      site_url: "https://www.propublica.org"
+      priority_boost: 0.5
+      interests: ["general-news"]
+      fetch_article: "auto"
+      categories: ["general-news"]
