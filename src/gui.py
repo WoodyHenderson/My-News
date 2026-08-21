@@ -40,6 +40,7 @@ PROVIDER_BRANDS = {
     "bbc": ("BBC", "#bb1919", "#ffffff"),
     "cnbc": ("CNBC", "#005594", "#ffffff"),
     "guardian": ("G", "#052962", "#ffffff"),
+    "new_york_times": ("NYT", "#111111", "#ffffff"),
     "propublica": ("PP", "#111111", "#ffffff"),
     "reuters": ("R", "#ff8000", "#17201d"),
 }
@@ -60,6 +61,10 @@ PROVIDER_SUMMARIES = {
     "guardian": (
         "A British newspaper covering UK and world news, with strong reporting "
         "on politics, society, culture, and the environment."
+    ),
+    "new_york_times": (
+        "A US newspaper known for national politics, international reporting, "
+        "investigations, analysis, business, technology, and culture."
     ),
     "propublica": (
         "An independent nonprofit newsroom specialising in investigative "

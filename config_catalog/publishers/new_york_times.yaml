@@ -1,0 +1,54 @@
+- id: "nyt"
+  name: "The New York Times"
+  description: "US and international news, analysis, business, and technology reporting"
+  site_url: "https://www.nytimes.com/"
+  feeds:
+    - id: "home-page"
+      name: "Top Stories"
+      kind: "feed"
+      url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+      site_url: "https://www.nytimes.com/"
+      priority_boost: 0.5
+      interests: ["general-news"]
+      fetch_article: "auto"
+      categories: ["general-news"]
+
+    - id: "us"
+      name: "U.S. News"
+      kind: "feed"
+      url: "https://rss.nytimes.com/services/xml/rss/nyt/US.xml"
+      site_url: "https://www.nytimes.com/section/us"
+      priority_boost: 0.1
+      interests: ["general-news"]
+      fetch_article: "auto"
+      categories: ["general-news"]
+
+    - id: "world"
+      name: "World News"
+      kind: "feed"
+      url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+      site_url: "https://www.nytimes.com/section/world"
+      priority_boost: 0.1
+      interests: ["general-news", "world"]
+      fetch_article: "auto"
+      categories: ["general-news", "world"]
+
+    - id: "technology"
+      name: "Technology"
+      kind: "feed"
+      url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml"
+      site_url: "https://www.nytimes.com/section/technology"
+      priority_boost: 0.1
+      interests: ["general-news", "ai", "gaming"]
+      fetch_article: "auto"
+      categories: ["general-news", "artificial_intelligence", "gaming"]
+
+    - id: "business"
+      name: "Business"
+      kind: "feed"
+      url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml"
+      site_url: "https://www.nytimes.com/section/business"
+      priority_boost: 0.1
+      interests: ["general-news", "business", "finance"]
+      fetch_article: "auto"
+      categories: ["general-news", "business", "finance"]
