@@ -6,7 +6,7 @@ It is basically a very small personal search engine for news, driven by yaml fil
 
 The scoring algorithm actually ended up curating interesting stuff often enough to where I am going to expand to include a GUI as there is a lot of useful functionality that can be added to make QoL and reusability better.
 
-At this stage I feel as though the CLI has been functionally deprecated, at the time of writing this (21/08/26) it still functions as intended but the amount of flexibility that the GUI provides means that it is no longer just better quality but if you want to customise your digest at all is actually faster as well.
+At this point the CLI is pretty much deprecated, it provided the basis of the functionality for moving forward but as its signficantly easier to port the changes to the GUI and easier to use as functionality has increased I won't be updating it much from here on (20/08/26)
 
 ## Setup
 
