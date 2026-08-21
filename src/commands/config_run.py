@@ -37,7 +37,6 @@ sources:
   # BBC publishes separate RSS feeds for each requested section.
   - id: "bbc-front-page"
     name: "BBC News - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://feeds.bbci.co.uk/news/rss.xml"
     site_url: "https://www.bbc.co.uk/news"
@@ -54,6 +53,8 @@ def run_application(
     output_path: Path | None = None,
     on_progress: Callable[[str, str], None] | None = None,
     max_articles_override: int | None = None,
+    provider_pref: list[str] | None = None,
+    category_pref: list[str] | None = None,
 ) -> None:
     """
     Run the application with the specified configuration file and output path.
@@ -66,8 +67,15 @@ def run_application(
             on_progress(msg, level)
 
     try:
+        progress(f"Collating your chosen preferences and providers...")
+        progress(f"Preferences collated successfully", "success")
+    except Exception as e:
+        progress(f"Failed to collate preferences: {e}", "error")
+        raise ConfigRunError(f"Failed to collate preferences: {e}") from e
+
+    try:
         progress("Loading and validating configuration...")
-        config_data = load_and_validate_config(config_path)
+        config_data = load_and_validate_config(config_path, provider_pref, category_pref)
         progress("Configuration validated successfully", "success")
     except ConfigValidationError as e:
         progress(f"Configuration validation failed: {e}", "error")
@@ -117,6 +125,7 @@ def run_application(
             article_data,
             config_path,
             max_articles_override=max_articles_override,
+            config_data=config_data,
         )
         progress(
             f"Successfully scored {len(article_data)} articles and selected "

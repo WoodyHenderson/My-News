@@ -5,7 +5,6 @@
   feeds:
     - id: "front-page"
       name: "Front Page"
-      enabled: true
       kind: "feed"
       url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
       site_url: "https://www.cnbc.com/"
@@ -15,7 +14,6 @@
       categories: ["business", "finance"]
     - id: "technology"
       name: "Technology"
-      enabled: true
       kind: "feed"
       url: "https://www.cnbc.com/id/19854910/device/rss/rss.html"
       site_url: "https://www.cnbc.com/technology/"

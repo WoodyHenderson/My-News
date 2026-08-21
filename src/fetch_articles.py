@@ -46,7 +46,7 @@ def fetch_articles(
     connect_timeout_seconds: float = 10,
     read_timeout_seconds: float = 20,
 ) -> dict[str, ArticleContent]:
-    """Fetch linked articles from each enabled RSS source."""
+    """Fetch linked articles from each configured RSS source."""
     articles: dict[str, ArticleContent] = {}
     failures: list[str] = []
     ssl_context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -65,9 +65,6 @@ def fetch_articles(
         headers=headers,
     ) as client:
         for source in sources:
-            if not source.get("enabled", True):
-                continue
-
             source_id = source["id"]
             try:
                 response = client.get(source["url"])

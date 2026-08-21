@@ -26,16 +26,18 @@ def rank_articles(
     articles: dict[str, ArticleContent],
     config_path: Path = _DEFAULT_CONFIG,
     max_articles_override: int | None = None,
+    config_data: dict | None = None,
 ) -> list[tuple[str, RankedArticle]]:
     """
     This function is here to rank articles after they have been scored, will return a dict
     of url: RankedArticle object, which contains ArticleContent, score, and matched_interests.
     """
-    ranked_articles = score_articles(articles, config_path)
+    ranked_articles = score_articles(articles, config_path, config_data=config_data)
 
-    with open(config_path, "r") as f:
-        config = yaml.safe_load(f)
-    digest = config.get("digest", {})
+    if config_data is None:
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f)
+    digest = config_data.get("digest", {})
     minimum_score = digest.get("minimum_score", 1.0)
     if max_articles_override == 0:
         max_articles: int | None = None
@@ -69,15 +71,20 @@ def rank_articles(
         return above_minimum
     return above_minimum[:max_articles]
 
-def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEFAULT_CONFIG) -> dict[str, RankedArticle]:
+def score_articles(
+    articles: dict[str, ArticleContent],
+    config_path: Path = _DEFAULT_CONFIG,
+    config_data: dict | None = None,
+) -> dict[str, RankedArticle]:
     """
     Scores every article based on the configuration file and returns a dict of url : RankedArticle
     """
-    with open(config_path, "r") as f:
-        config = yaml.safe_load(f)
+    if config_data is None:
+        with open(config_path, "r") as f:
+            config_data = yaml.safe_load(f)
 
-    interests_by_id = {interest["id"]: interest for interest in config.get("interests", [])}
-    sources_by_id = {source["id"]: source for source in config.get("sources", [])}
+    interests_by_id = {interest["id"]: interest for interest in config_data.get("interests", [])}
+    sources_by_id = {source["id"]: source for source in config_data.get("sources", [])}
 
     avgdl = calculate_average_doclength(articles)
     avg_title_length, avg_body_length = avgdl
@@ -166,7 +173,7 @@ def score_articles(articles: dict[str, ArticleContent], config_path: Path = _DEF
             source = sources_by_id.get(article.source_id, {})
             if article.published_at is not None:
                 age_hours = (now - article.published_at).total_seconds() / 3600
-                lookback_hours = config.get("digest", {}).get("lookback_hours", 48)
+                lookback_hours = config_data.get("digest", {}).get("lookback_hours", 48)
                 recency = 2.0 * max(0.0, 1.0 - age_hours / lookback_hours)
                 score += recency
             priority = min(max(source.get("priority_boost", 0.0), 0.0), 1.0) # copilot was smart here and suggested this as a fix for a potential edge case if someone is an idiot

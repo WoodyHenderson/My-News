@@ -31,10 +31,10 @@ for interest in config["interests"]:
 urls = config_data.get("url", [])  # BUG: should read from sources list
 ```
 
-URLs live inside `config_data["sources"]`. Fix to extract enabled source URLs:
+URLs live inside `config_data["sources"]`. Fetch all configured sources:
 
 ```python
-sources = [s for s in config_data.get("sources", []) if s.get("enabled", True)]
+sources = config_data.get("sources", [])
 ```
 
 ### 4. `RankedArticle` cannot hold an explanation or rejection reason

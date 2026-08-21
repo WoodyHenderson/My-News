@@ -11,39 +11,24 @@ class ConfigInitError(ValueError):
 def initialize_config(
     config_path: Path,
     force: bool = False,
-    backups_dir: Path = Path("config/configbackups"),
-    example_config_path: Path = Path("example.yaml"),
+    default_config_path: Path = Path("config/default.yaml"),
 ) -> list[str]:
-    """Initialize configuration by restoring backup or copying the example file."""
-    messages: list[str] = []
+    """Initialize configuration by copying the base config."""
 
     if config_path.exists() and not force:
         raise ConfigInitError(
             f"Configuration file {config_path} already exists. Use --force to overwrite."
         )
 
-    if not config_path.exists():
-        messages.append(f"Configuration file not found at {config_path}. Trying to restore a backup")
-        backups = sorted(backups_dir.glob("config_*.yaml"), reverse=True)
+    config_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if backups:
-            latest_backup = backups[0]
-            try:
-                copyfile(latest_backup, config_path)
-                messages.append(
-                    f"Restored configuration from backup: {latest_backup} to {config_path}"
-                )
-            except Exception as exc:
-                raise ConfigInitError(f"Failed to restore backup. Error: {exc}") from exc
-        else:
-            messages.append(f"No backup configuration files found in {backups_dir}.")
+    try:
+        copyfile(default_config_path, config_path)
+    except Exception as exc:
+        raise ConfigInitError(f"Failed to initialize configuration. Error: {exc}") from exc
 
-        try:
-            copyfile(example_config_path, config_path)
-            messages.append(
-                f"Example configuration file created at {config_path}. RENAME to 'config.yaml' and customise"
-            )
-        except Exception as exc:
-            raise ConfigInitError(f"Tf did u do bro. Error: {exc}") from exc
-
-    return messages
+    if force:
+        return [f"Base configuration file restored at {config_path}."]
+    return [
+        f"Base configuration file created at {config_path}. Add your interests and sources to customise it."
+    ]

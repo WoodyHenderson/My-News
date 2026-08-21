@@ -128,7 +128,6 @@ sources:
   # BBC publishes separate RSS feeds for each requested section.
   - id: "bbc-front-page"
     name: "BBC News - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://feeds.bbci.co.uk/news/rss.xml"
     site_url: "https://www.bbc.co.uk/news"
@@ -142,7 +141,6 @@ sources:
 
   - id: "bbc-technology"
     name: "BBC News - Technology"
-    enabled: true
     kind: "feed"
     url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
     site_url: "https://www.bbc.co.uk/news/technology"
@@ -155,7 +153,6 @@ sources:
 
   - id: "bbc-business"
     name: "BBC News - Business"
-    enabled: true
     kind: "feed"
     url: "https://feeds.bbci.co.uk/news/business/rss.xml"
     site_url: "https://www.bbc.co.uk/news/business"
@@ -168,7 +165,6 @@ sources:
 
   - id: "bbc-politics"
     name: "BBC News - Politics"
-    enabled: true
     kind: "feed"
     url: "https://feeds.bbci.co.uk/news/politics/rss.xml"
     site_url: "https://www.bbc.co.uk/news/politics"
@@ -182,7 +178,6 @@ sources:
   # The Guardian also publishes separate RSS feeds for each requested section.
   - id: "guardian-front-page"
     name: "The Guardian - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://www.theguardian.com/international/rss"
     site_url: "https://www.theguardian.com/international"
@@ -195,7 +190,6 @@ sources:
 
   - id: "guardian-technology"
     name: "The Guardian - Technology"
-    enabled: true
     kind: "feed"
     url: "https://www.theguardian.com/uk/technology/rss"
     site_url: "https://www.theguardian.com/uk/technology"
@@ -208,7 +202,6 @@ sources:
 
   - id: "guardian-business"
     name: "The Guardian - Business"
-    enabled: true
     kind: "feed"
     url: "https://www.theguardian.com/uk/business/rss"
     site_url: "https://www.theguardian.com/uk/business"
@@ -221,7 +214,6 @@ sources:
 
   - id: "guardian-politics"
     name: "The Guardian - Politics"
-    enabled: true
     kind: "feed"
     url: "https://www.theguardian.com/politics/rss"
     site_url: "https://www.theguardian.com/politics"
@@ -236,7 +228,6 @@ sources:
   # guessed technology, business, and politics feed URLs return 404 responses.
   - id: "propublica-latest"
     name: "ProPublica - Latest Investigations"
-    enabled: true
     kind: "feed"
     url: "https://www.propublica.org/feeds/propublica/main"
     site_url: "https://www.propublica.org"
@@ -249,7 +240,6 @@ sources:
   # We just use RSSHub to get the feeds for them instead.
   - id: "ap-front-page"
     name: "Associated Press - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://news.google.com/rss/search?q=site%3Aapnews.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
     site_url: "https://apnews.com/"
@@ -260,7 +250,6 @@ sources:
 
   - id: "reuters-front-page"
     name: "Reuters - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://news.google.com/rss/search?q=site%3Areuters.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
     site_url: "https://www.reuters.com/"
@@ -271,7 +260,6 @@ sources:
 
   - id: "cnbc-front-page"
     name: "CNBC - Front Page"
-    enabled: true
     kind: "feed"
     url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
     site_url: "https://www.cnbc.com/"
@@ -283,7 +271,6 @@ sources:
 
   - id: "cnbc-technology"
     name: "CNBC - Technology"
-    enabled: true
     kind: "feed"
     url: "https://www.cnbc.com/id/19854910/device/rss/rss.html"
     site_url: "https://www.cnbc.com/technology/"

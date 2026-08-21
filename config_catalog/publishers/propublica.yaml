@@ -5,7 +5,6 @@
   feeds:
     - id: "latest"
       name: "Latest Investigations"
-      enabled: true
       kind: "feed"
       url: "https://www.propublica.org/feeds/propublica/main"
       site_url: "https://www.propublica.org"

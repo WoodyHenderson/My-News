@@ -4,11 +4,14 @@ import sys
 from datetime import date
 from pathlib import Path
 
+import yaml
 from PyQt6.QtCore import QObject, QSize, Qt, QThread, QUrl, pyqtSignal
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
+    QDialog,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -17,9 +20,11 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QSizePolicy,
     QStyle,
+    QTabWidget,
     QToolButton,
     QVBoxLayout,
     QWidget,
+    QScrollArea,
 )
 
 from src.html_viewer import HtmlViewerWindow
@@ -28,6 +33,249 @@ from src.output_generation.generate_digest import _write_pdf
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
+CATALOG_DIR = PROJECT_ROOT / "config_catalog"
+
+PROVIDER_BRANDS = {
+    "associated_press": ("AP", "#f04e30", "#ffffff"),
+    "bbc": ("BBC", "#bb1919", "#ffffff"),
+    "cnbc": ("CNBC", "#005594", "#ffffff"),
+    "guardian": ("G", "#052962", "#ffffff"),
+    "propublica": ("PP", "#111111", "#ffffff"),
+    "reuters": ("R", "#ff8000", "#17201d"),
+}
+
+
+class ManageDigestDialog(QDialog):
+    """Dialog to select categories and providers for digest generation."""
+
+    def __init__(self, parent: QMainWindow | None = None) -> None:
+        super().__init__(parent)
+        self.setObjectName("manageDigestDialog")
+        self.setWindowTitle("Manage Digest")
+        self.setMinimumSize(560, 480)
+
+        self._category_checks: dict[str, QCheckBox] = {}
+        self._provider_checks: dict[str, QCheckBox] = {}
+
+        self._build_ui()
+        self._apply_styles()
+
+    def _build_ui(self) -> None:
+        layout = QVBoxLayout(self)
+
+        # Tab widget for categories and providers
+        tabs = QTabWidget()
+        tabs.addTab(self._build_categories_tab(), "Categories")
+        tabs.addTab(self._build_providers_tab(), "Providers")
+        layout.addWidget(tabs)
+
+        # Action buttons
+        button_layout = QHBoxLayout()
+        button_layout.addStretch()
+
+        apply_button = QPushButton("Apply")
+        apply_button.clicked.connect(self.accept)
+        button_layout.addWidget(apply_button)
+
+        cancel_button = QPushButton("Cancel")
+        cancel_button.clicked.connect(self.reject)
+        button_layout.addWidget(cancel_button)
+
+        layout.addLayout(button_layout)
+
+    def _build_categories_tab(self) -> QWidget:
+        """Build the categories selection tab."""
+        container = QWidget()
+        layout = QVBoxLayout(container)
+
+        categories_dir = CATALOG_DIR / "categories"
+        if not categories_dir.exists():
+            layout.addWidget(QLabel("No categories found."))
+            return container
+
+        category_files = sorted([f.stem for f in categories_dir.glob("*.yaml")])
+
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
+
+        for category in category_files:
+            checkbox = QCheckBox(category.replace("_", " ").title())
+            checkbox.setObjectName(category)
+            checkbox.setChecked(True)
+            self._category_checks[category] = checkbox
+            scroll_layout.addWidget(checkbox)
+
+        scroll_layout.addStretch()
+        scroll_area.setWidget(scroll_widget)
+        layout.addWidget(scroll_area)
+
+        return container
+
+    def _build_providers_tab(self) -> QWidget:
+        """Build the providers selection tab."""
+        container = QWidget()
+        container.setObjectName("providersTab")
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(18, 18, 18, 18)
+
+        publishers_dir = CATALOG_DIR / "publishers"
+        if not publishers_dir.exists():
+            layout.addWidget(QLabel("No providers found."))
+            return container
+
+        provider_files = sorted([f.stem for f in publishers_dir.glob("*.yaml")])
+
+        scroll_area = QScrollArea()
+        scroll_area.setObjectName("providersScrollArea")
+        scroll_area.setWidgetResizable(True)
+        scroll_widget = QWidget()
+        scroll_widget.setObjectName("providersScrollContent")
+        scroll_layout = QVBoxLayout(scroll_widget)
+        scroll_layout.setContentsMargins(0, 0, 0, 0)
+        scroll_layout.setSpacing(10)
+
+        for provider in provider_files:
+            provider_file = publishers_dir / f"{provider}.yaml"
+            display_name = provider.replace("_", " ").title()
+            description = ""
+            try:
+                provider_data = yaml.safe_load(provider_file.read_text(encoding="utf-8"))
+                if provider_data and isinstance(provider_data[0], dict):
+                    display_name = provider_data[0].get("name", display_name)
+                    description = provider_data[0].get("description", "")
+            except (OSError, yaml.YAMLError):
+                pass
+
+            row = QFrame()
+            row.setObjectName("providerRow")
+            row.setMinimumHeight(64)
+            row_layout = QHBoxLayout(row)
+            row_layout.setContentsMargins(18, 10, 14, 10)
+            row_layout.setSpacing(16)
+
+            name_label = QLabel(display_name)
+            name_label.setObjectName("providerName")
+            if description:
+                name_label.setToolTip(description)
+            row_layout.addWidget(name_label)
+            row_layout.addStretch()
+
+            monogram, background, foreground = PROVIDER_BRANDS.get(
+                provider,
+                (display_name[:2].upper(), "#55605b", "#ffffff"),
+            )
+            icon_label = QLabel(monogram)
+            icon_label.setObjectName("providerIcon")
+            icon_label.setAccessibleName(f"{display_name} icon")
+            icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            icon_label.setFixedSize(54, 32)
+            icon_label.setStyleSheet(
+                f"background: {background}; color: {foreground};"
+            )
+            row_layout.addWidget(icon_label)
+
+            checkbox = QCheckBox()
+            checkbox.setObjectName(provider)
+            checkbox.setAccessibleName(f"Include {display_name}")
+            checkbox.setToolTip(f"Include {display_name} in the digest")
+            checkbox.setChecked(True)
+            self._provider_checks[provider] = checkbox
+            row_layout.addWidget(checkbox)
+            scroll_layout.addWidget(row)
+
+        scroll_layout.addStretch()
+        scroll_area.setWidget(scroll_widget)
+        layout.addWidget(scroll_area)
+
+        return container
+
+    def _apply_styles(self) -> None:
+        self.setStyleSheet(
+            """
+            QDialog#manageDigestDialog {
+                background: #f3f5f1;
+            }
+            QDialog#manageDigestDialog QTabWidget::pane {
+                background: #f7f8f5;
+                border: 1px solid #c9ceca;
+                border-radius: 4px;
+                top: -1px;
+            }
+            QDialog#manageDigestDialog QTabBar::tab {
+                background: #e5e9e5;
+                color: #4d5852;
+                border: 1px solid #c9ceca;
+                padding: 10px 24px;
+                font-family: "Avenir Next";
+                font-size: 13px;
+                font-weight: 600;
+            }
+            QDialog#manageDigestDialog QTabBar::tab:selected {
+                background: #f7f8f5;
+                color: #17201d;
+                border-bottom-color: #f7f8f5;
+            }
+            QWidget#providersTab, QWidget#providersScrollContent,
+            QScrollArea#providersScrollArea {
+                background: #f7f8f5;
+                border: 0;
+            }
+            QFrame#providerRow {
+                background: #ffffff;
+                border: 1px solid #d2d7d3;
+                border-radius: 4px;
+            }
+            QLabel#providerName {
+                color: #17201d;
+                font-family: "Avenir Next";
+                font-size: 15px;
+                font-weight: 600;
+            }
+            QLabel#providerIcon {
+                border: 0;
+                border-radius: 3px;
+                font-family: "Avenir Next";
+                font-size: 11px;
+                font-weight: 800;
+            }
+            QFrame#providerRow QCheckBox::indicator {
+                width: 22px;
+                height: 22px;
+            }
+            QDialog#manageDigestDialog QPushButton {
+                min-width: 92px;
+                min-height: 38px;
+                border: 1px solid #aeb6b1;
+                border-radius: 4px;
+                background: #ffffff;
+                color: #17201d;
+                font-family: "Avenir Next";
+                font-size: 13px;
+                font-weight: 600;
+            }
+            QDialog#manageDigestDialog QPushButton:hover {
+                background: #e7ece8;
+            }
+            """
+        )
+
+    def get_selected_categories(self) -> list[str]:
+        """Return list of selected category keys."""
+        return [
+            key
+            for key, checkbox in self._category_checks.items()
+            if checkbox.isChecked()
+        ]
+
+    def get_selected_providers(self) -> list[str]:
+        """Return list of selected provider keys."""
+        return [
+            key
+            for key, checkbox in self._provider_checks.items()
+            if checkbox.isChecked()
+        ]
 
 
 def discover_html_outputs(output_dir: Path) -> list[Path]:
@@ -53,11 +301,15 @@ class RunDigestWorker(QObject):
         config_path: Path,
         output_path: Path,
         max_articles_override: int | None,
+        provider_pref: list[str] | None = None,
+        category_pref: list[str] | None = None,
     ) -> None:
         super().__init__()
         self.config_path = config_path
         self.output_path = output_path
         self.max_articles_override = max_articles_override
+        self.provider_pref = provider_pref
+        self.category_pref = category_pref
 
     def run(self) -> None:
         try:
@@ -68,6 +320,8 @@ class RunDigestWorker(QObject):
                 output_path=self.output_path,
                 on_progress=self.progress.emit,
                 max_articles_override=self.max_articles_override,
+                provider_pref=self.provider_pref,
+                category_pref=self.category_pref,
             )
             self.finished.emit(str(self.output_path.resolve()))
         except Exception as exc:
@@ -86,6 +340,13 @@ class MainWindow(QMainWindow):
         self._run_thread: QThread | None = None
         self._run_worker: RunDigestWorker | None = None
         self._viewer_window: HtmlViewerWindow | None = None
+        self._manage_digest_dialog: ManageDigestDialog | None = None
+        
+        # Initialize with all available categories and providers selected by default
+        categories_dir = CATALOG_DIR / "categories"
+        self._selected_categories = sorted([f.stem for f in categories_dir.glob("*.yaml")]) if categories_dir.exists() else []
+        publishers_dir = CATALOG_DIR / "publishers"
+        self._selected_providers = sorted([f.stem for f in publishers_dir.glob("*.yaml")]) if publishers_dir.exists() else []
 
         self.setObjectName("mainWindow")
         self.setWindowTitle("My News")
@@ -218,6 +479,16 @@ class MainWindow(QMainWindow):
         self.run_button.setMinimumHeight(50)
         self.run_button.clicked.connect(self.run_digest)
         action_row.addWidget(self.run_button)
+
+        self.manage_button = QPushButton("Manage Digest")
+        self.manage_button.setObjectName("manageButton")
+        self.manage_button.setIcon(
+            self.style().standardIcon(QStyle.StandardPixmap.SP_FileDialogListView)
+        )
+        self.manage_button.setIconSize(QSize(18, 18))
+        self.manage_button.setMinimumHeight(50)
+        self.manage_button.clicked.connect(self._open_manage_digest_dialog)
+        action_row.addWidget(self.manage_button)
 
         self.view_button = QPushButton("View")
         self.view_button.setObjectName("viewButton")
@@ -407,13 +678,16 @@ class MainWindow(QMainWindow):
                 font-weight: 700;
                 letter-spacing: 0;
             }
-            QPushButton#runButton {
+            QPushButton#runButton, QPushButton#manageButton {
                 background: #ffffff;
                 color: #17201d;
                 border: 1px solid #aeb6b1;
             }
-            QPushButton#runButton:hover {
+            QPushButton#runButton:hover, QPushButton#manageButton:hover {
                 background: #e7ece8;
+            }
+            QPushButton#manageButton {
+                min-width: 160px;
             }
             QPushButton#viewButton {
                 background: #28775b;
@@ -470,6 +744,18 @@ class MainWindow(QMainWindow):
         selected_data = self.output_selector.currentData()
         return Path(selected_data) if selected_data else None
 
+    def _open_manage_digest_dialog(self) -> None:
+        """Open the Manage Digest dialog to select categories and providers."""
+        self._manage_digest_dialog = ManageDigestDialog(self)
+        if self._manage_digest_dialog.exec() == QDialog.DialogCode.Accepted:
+            self._selected_categories = self._manage_digest_dialog.get_selected_categories()
+            self._selected_providers = self._manage_digest_dialog.get_selected_providers()
+            categories_str = ", ".join(self._selected_categories) or "None"
+            providers_str = ", ".join(self._selected_providers) or "None"
+            self.run_status.setText(
+                f"Categories: {categories_str} | Providers: {providers_str}"
+            )
+
     def run_digest(self) -> None:
         if self._run_thread is not None:
             return
@@ -483,6 +769,8 @@ class MainWindow(QMainWindow):
             self.config_path,
             output_path,
             selected_max_articles,
+            provider_pref=self._selected_providers,
+            category_pref=self._selected_categories,
         )
         self._run_thread = QThread(self)
         self._run_worker.moveToThread(self._run_thread)

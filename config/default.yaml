@@ -1,0 +1,27 @@
+# Base configuration for every My News profile.
+version: 1
+
+digest:
+  title: "My News"
+  timezone: "Europe/London"
+  lookback_hours: 48
+  max_articles: 30
+  minimum_score: 1.0
+  output_directory: "output"
+  filename: "my-news-{date}.pdf"
+  show_match_reasons: true
+  show_visible_urls: false
+  show_access_warnings: true
+
+network:
+  user_agent: "MyNews/0.1 (personal news digest)"
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 20
+  requests_per_host_per_second: 0.5
+  max_retries: 2
+  max_response_bytes: 5000000
+  max_article_fetches_per_source: 20
+
+# Add the interests and sources selected for this profile.
+interests: []
+sources: []

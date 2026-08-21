@@ -9,6 +9,10 @@ How we might potentially do this is there's a top level folder at the same level
 
 The user's selections should probably not create a new yaml file every time. Instead, we can load the catalog files, combine the selected providers, feeds, categories and priority into one runtime config in memory, validate that config, and then pass it through the existing fetch and ranking process. This also means the catalog is separate from the user's session and we do not have to maintain a large number of temporary config files. We may need to refactor the ranking process eventually so it can accept the validated config directly rather than reading it from a path, but that can happen when this becomes a web-hosted service.
 
+Currently working on planning out how to stream in configs, config will just end up being a product stored in memory as said before to make things easier, can have a preset of the network options that the user doesn't need to mess with and then allow them to select their interests which then appends the stuff from the config_catalog into that config.
+
+Right now load_and_validate_config() is probably what needs the overhaul from looking, instead of working how it normally does where we just pass through a path and parse it for validity we need to pass through the users choices for publishers and categories and then find the matching yaml's, read them into the in memory config and then use that as what we return for config_data.
+
 ## 2. Create a GUI that allows people to select from news providers
 
 Can provide a brief description of the news websites, might do a ground news type deal where we talk about what way they typically lean but people will probably know that themselves, not really going to use any niche news providers for now anyways.

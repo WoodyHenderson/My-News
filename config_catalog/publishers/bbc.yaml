@@ -6,7 +6,6 @@
   feeds:
     - id: "front-page"
       name: "Front Page"
-      enabled: true
       kind: "feed"
       url: "https://feeds.bbci.co.uk/news/rss.xml"
       site_url: "https://www.bbc.co.uk/news"
@@ -24,7 +23,6 @@
 
     - id: "technology"
       name: "Technology"
-      enabled: true
       kind: "feed"
       url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
       site_url: "https://www.bbc.co.uk/news/technology"
@@ -40,7 +38,6 @@
 
     - id: "politics"
       name: "Politics"
-      enabled: true
       kind: "feed"
       url: "https://feeds.bbci.co.uk/news/politics/rss.xml"
       site_url: "https://www.bbc.co.uk/news/politics"
@@ -56,7 +53,6 @@
 
     - id: "business"
       name: "Business"
-      enabled: true
       kind: "feed"
       url: "https://feeds.bbci.co.uk/news/business/rss.xml"
       site_url: "https://www.bbc.co.uk/news/business"
