@@ -44,6 +44,33 @@ PROVIDER_BRANDS = {
     "reuters": ("R", "#ff8000", "#17201d"),
 }
 
+PROVIDER_SUMMARIES = {
+    "associated_press": (
+        "A global nonprofit news cooperative known for fast, factual reporting "
+        "across politics, world events, business, and sport."
+    ),
+    "bbc": (
+        "The UK's public-service broadcaster, covering mainstream world news "
+        "with particular strength in UK current affairs."
+    ),
+    "cnbc": (
+        "An international business news network specialising in markets, "
+        "companies, finance, and technology."
+    ),
+    "guardian": (
+        "A British newspaper covering UK and world news, with strong reporting "
+        "on politics, society, culture, and the environment."
+    ),
+    "propublica": (
+        "An independent nonprofit newsroom specialising in investigative "
+        "journalism and stories in the public interest."
+    ),
+    "reuters": (
+        "A global news agency known for timely international reporting, "
+        "especially on politics, business, markets, and economics."
+    ),
+}
+
 
 class ManageDigestDialog(QDialog):
     """Dialog to select categories and providers for digest generation."""
@@ -160,6 +187,19 @@ class ManageDigestDialog(QDialog):
             if description:
                 name_label.setToolTip(description)
             row_layout.addWidget(name_label)
+
+            provider_summary = PROVIDER_SUMMARIES.get(provider, description)
+            info_button = QToolButton()
+            info_button.setObjectName("providerInfoButton")
+            info_button.setAccessibleName(f"About {display_name}")
+            info_button.setToolTip(provider_summary)
+            info_button.setIcon(
+                self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxInformation)
+            )
+            info_button.setIconSize(QSize(17, 17))
+            info_button.setFixedSize(28, 28)
+            info_button.setAutoRaise(True)
+            row_layout.addWidget(info_button)
             row_layout.addStretch()
 
             monogram, background, foreground = PROVIDER_BRANDS.get(
@@ -239,6 +279,15 @@ class ManageDigestDialog(QDialog):
                 font-family: "Avenir Next";
                 font-size: 11px;
                 font-weight: 800;
+            }
+            QToolButton#providerInfoButton {
+                background: transparent;
+                border: 0;
+                border-radius: 3px;
+                padding: 3px;
+            }
+            QToolButton#providerInfoButton:hover {
+                background: #e7ece8;
             }
             QFrame#providerRow QCheckBox::indicator {
                 width: 22px;

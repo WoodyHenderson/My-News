@@ -1,6 +1,6 @@
 # List of things to implement for even more the future.
 
-## 1. Create a repository of providers, categories and searches
+## 1. Create a repository of providers, categories and searches ✅
 
 I want to allow users to have categories they can dynamically select/deselect at a certain point in order to allow them to have the maximum amount of control, we may be headed towards a kind of web-hosted service so it'd be nice to allow people to use it as a guest (dont want an account system) and simply select the categories and providers they want to see from and then hit go. Probably need to institute a minimum number of providers at once, although we should probably count distinct news organisations rather than individual feeds so that someone cannot select five BBC feeds and technically meet the minimum.
 It'd be ideal to create preset weights as well, e.g. a user can select priorities like low/medium/high that have preselected multipliers for their individually generated config. This would be better than having separate keyword sets for every priority, since the category can have a base weight and the priority can just multiply it. Need to think about handling individual sessions, shouldn't be super hard as the user selections are fairly small and can probably be stored in a short-lived signed cookie at first.
@@ -13,7 +13,7 @@ Currently working on planning out how to stream in configs, config will just end
 
 Right now load_and_validate_config() is probably what needs the overhaul from looking, instead of working how it normally does where we just pass through a path and parse it for validity we need to pass through the users choices for publishers and categories and then find the matching yaml's, read them into the in memory config and then use that as what we return for config_data.
 
-## 2. Create a GUI that allows people to select from news providers
+## 2. Create a GUI that allows people to select from news providers ✅
 
 Can provide a brief description of the news websites, might do a ground news type deal where we talk about what way they typically lean but people will probably know that themselves, not really going to use any niche news providers for now anyways.
 
