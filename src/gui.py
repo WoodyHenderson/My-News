@@ -4,6 +4,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+import yaml
 from PyQt6.QtCore import QObject, QSize, Qt, QThread, QUrl, pyqtSignal
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
@@ -34,20 +35,30 @@ DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
 CATALOG_DIR = PROJECT_ROOT / "config_catalog"
 
+PROVIDER_BRANDS = {
+    "associated_press": ("AP", "#f04e30", "#ffffff"),
+    "bbc": ("BBC", "#bb1919", "#ffffff"),
+    "cnbc": ("CNBC", "#005594", "#ffffff"),
+    "guardian": ("G", "#052962", "#ffffff"),
+    "propublica": ("PP", "#111111", "#ffffff"),
+    "reuters": ("R", "#ff8000", "#17201d"),
+}
+
 
 class ManageDigestDialog(QDialog):
     """Dialog to select categories and providers for digest generation."""
 
     def __init__(self, parent: QMainWindow | None = None) -> None:
         super().__init__(parent)
+        self.setObjectName("manageDigestDialog")
         self.setWindowTitle("Manage Digest")
-        self.setMinimumWidth(500)
-        self.setMinimumHeight(400)
+        self.setMinimumSize(560, 480)
 
         self._category_checks: dict[str, QCheckBox] = {}
         self._provider_checks: dict[str, QCheckBox] = {}
 
         self._build_ui()
+        self._apply_styles()
 
     def _build_ui(self) -> None:
         layout = QVBoxLayout(self)
@@ -105,7 +116,9 @@ class ManageDigestDialog(QDialog):
     def _build_providers_tab(self) -> QWidget:
         """Build the providers selection tab."""
         container = QWidget()
+        container.setObjectName("providersTab")
         layout = QVBoxLayout(container)
+        layout.setContentsMargins(18, 18, 18, 18)
 
         publishers_dir = CATALOG_DIR / "publishers"
         if not publishers_dir.exists():
@@ -115,22 +128,138 @@ class ManageDigestDialog(QDialog):
         provider_files = sorted([f.stem for f in publishers_dir.glob("*.yaml")])
 
         scroll_area = QScrollArea()
+        scroll_area.setObjectName("providersScrollArea")
         scroll_area.setWidgetResizable(True)
         scroll_widget = QWidget()
+        scroll_widget.setObjectName("providersScrollContent")
         scroll_layout = QVBoxLayout(scroll_widget)
+        scroll_layout.setContentsMargins(0, 0, 0, 0)
+        scroll_layout.setSpacing(10)
 
         for provider in provider_files:
-            checkbox = QCheckBox(provider.replace("_", " ").title())
+            provider_file = publishers_dir / f"{provider}.yaml"
+            display_name = provider.replace("_", " ").title()
+            description = ""
+            try:
+                provider_data = yaml.safe_load(provider_file.read_text(encoding="utf-8"))
+                if provider_data and isinstance(provider_data[0], dict):
+                    display_name = provider_data[0].get("name", display_name)
+                    description = provider_data[0].get("description", "")
+            except (OSError, yaml.YAMLError):
+                pass
+
+            row = QFrame()
+            row.setObjectName("providerRow")
+            row.setMinimumHeight(64)
+            row_layout = QHBoxLayout(row)
+            row_layout.setContentsMargins(18, 10, 14, 10)
+            row_layout.setSpacing(16)
+
+            name_label = QLabel(display_name)
+            name_label.setObjectName("providerName")
+            if description:
+                name_label.setToolTip(description)
+            row_layout.addWidget(name_label)
+            row_layout.addStretch()
+
+            monogram, background, foreground = PROVIDER_BRANDS.get(
+                provider,
+                (display_name[:2].upper(), "#55605b", "#ffffff"),
+            )
+            icon_label = QLabel(monogram)
+            icon_label.setObjectName("providerIcon")
+            icon_label.setAccessibleName(f"{display_name} icon")
+            icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            icon_label.setFixedSize(54, 32)
+            icon_label.setStyleSheet(
+                f"background: {background}; color: {foreground};"
+            )
+            row_layout.addWidget(icon_label)
+
+            checkbox = QCheckBox()
             checkbox.setObjectName(provider)
+            checkbox.setAccessibleName(f"Include {display_name}")
+            checkbox.setToolTip(f"Include {display_name} in the digest")
             checkbox.setChecked(True)
             self._provider_checks[provider] = checkbox
-            scroll_layout.addWidget(checkbox)
+            row_layout.addWidget(checkbox)
+            scroll_layout.addWidget(row)
 
         scroll_layout.addStretch()
         scroll_area.setWidget(scroll_widget)
         layout.addWidget(scroll_area)
 
         return container
+
+    def _apply_styles(self) -> None:
+        self.setStyleSheet(
+            """
+            QDialog#manageDigestDialog {
+                background: #f3f5f1;
+            }
+            QDialog#manageDigestDialog QTabWidget::pane {
+                background: #f7f8f5;
+                border: 1px solid #c9ceca;
+                border-radius: 4px;
+                top: -1px;
+            }
+            QDialog#manageDigestDialog QTabBar::tab {
+                background: #e5e9e5;
+                color: #4d5852;
+                border: 1px solid #c9ceca;
+                padding: 10px 24px;
+                font-family: "Avenir Next";
+                font-size: 13px;
+                font-weight: 600;
+            }
+            QDialog#manageDigestDialog QTabBar::tab:selected {
+                background: #f7f8f5;
+                color: #17201d;
+                border-bottom-color: #f7f8f5;
+            }
+            QWidget#providersTab, QWidget#providersScrollContent,
+            QScrollArea#providersScrollArea {
+                background: #f7f8f5;
+                border: 0;
+            }
+            QFrame#providerRow {
+                background: #ffffff;
+                border: 1px solid #d2d7d3;
+                border-radius: 4px;
+            }
+            QLabel#providerName {
+                color: #17201d;
+                font-family: "Avenir Next";
+                font-size: 15px;
+                font-weight: 600;
+            }
+            QLabel#providerIcon {
+                border: 0;
+                border-radius: 3px;
+                font-family: "Avenir Next";
+                font-size: 11px;
+                font-weight: 800;
+            }
+            QFrame#providerRow QCheckBox::indicator {
+                width: 22px;
+                height: 22px;
+            }
+            QDialog#manageDigestDialog QPushButton {
+                min-width: 92px;
+                min-height: 38px;
+                border: 1px solid #aeb6b1;
+                border-radius: 4px;
+                background: #ffffff;
+                color: #17201d;
+                font-family: "Avenir Next";
+                font-size: 13px;
+                font-weight: 600;
+            }
+            QDialog#manageDigestDialog QPushButton:hover {
+                background: #e7ece8;
+            }
+            """
+        )
 
     def get_selected_categories(self) -> list[str]:
         """Return list of selected category keys."""
