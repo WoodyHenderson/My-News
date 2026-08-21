@@ -2,11 +2,11 @@
 
 I wanted a small headless app that gives me recent news I am actually interested in, from sources I have chosen to trust. My News fetches articles from configured RSS feeds, works out how well they match my interests, and generates a ranked digest with links back to the original articles, this is accessible as either an HTML viewable in app in a Chromium widget or can be exported to a set location as a PDF.
 
-It is basically a very small personal search engine for news, driven by one YAML config file that is self-curated.
+It is basically a very small personal search engine for news, driven by yaml files that represent providers and categories.
 
-The scoring algorithm actually ended up curating interesting stuff often enough to where I am going to expand to include a head as there is a lot of useful functionality that can be added to make QoL and reusability better.
+The scoring algorithm actually ended up curating interesting stuff often enough to where I am going to expand to include a GUI as there is a lot of useful functionality that can be added to make QoL and reusability better.
 
-P.S. It also ended up pulling from sources like BBC iPlayer, originally I felt like this was some weird bug but I think its just because sites will tend to refer to their other resources on their news pages and I was going to make a patch for this but after thinking about it I actually think its kind of a neat side effect (feature not bug).
+At this stage I feel as though the CLI has been functionally deprecated, at the time of writing this (21/08/26) it still functions as intended but the amount of flexibility that the GUI provides means that it is no longer just better quality but if you want to customise your digest at all is actually faster as well.
 
 ## Setup
 
@@ -37,10 +37,10 @@ my-news run --config example.yaml --output output/my-digest.html # You can open 
 
 ## Configuration and ranking
 
-The YAML controls which sources are included, which interests apply to each source, how strongly terms and phrases should be weighted, and things like the lookback window and maximum number of articles.
+The default YAML controls the basic network and digest settings, attempting to handle cases where pages may be unavailable and identifying itself to publishers (if you don't have this frequently publishers will reject your http requests). The config catalog contains the yaml files corresponding to each publisher/category that users can then select between in the GUI. The weighting of these is currently static but will likely become dynamic in the future to allow users to decide how important each of these is to them specifically.
 
 Articles are scored using a slightly bastardised BM25 algorithm. Matches in titles and article bodies are weighted separately, then source priority and recency are added before the best results are put into the digest. This lets me heavily favour something specific like gaming while only giving something noisy like AI a slight boost. 
 
 Articles that the user has "Marked as Seen" are populated to a local SQlite3 database instance and then filtered out before ranking happens.
 
-The project currently uses feeds from sources including the BBC, The Guardian, ProPublica, AP and Reuters. Some sources use google news' RSS services as they don't have their own publicly available RSS feeds or require a paid API key for this service. May (probably will) continue to maintain and update the config for myself and might make the occasional change here and there in general when I find reliable sources I want to use or new topics I am interested in.
+The project currently uses feeds from sources including the BBC, The Guardian, ProPublica, AP and Reuters. Some sources use google news' RSS services as they don't have their own publicly available RSS feeds or require a paid API key for this service. Will continue to try and curate as many sources as I find useful, however, will likely only include mainstream providers.
