@@ -32,7 +32,7 @@ from src.output_generation.generate_digest import _write_pdf
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "output"
-DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
+DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config" / "default.yaml"
 CATALOG_DIR = PROJECT_ROOT / "config_catalog"
 
 PROVIDER_BRANDS = {
