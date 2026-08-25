@@ -8,7 +8,9 @@ The scoring algorithm actually ended up curating interesting stuff often enough 
 
 At this point the CLI is pretty much deprecated, it provided the basis of the functionality for moving forward but as its signficantly easier to port the changes to the GUI and easier to use as functionality has increased I won't be updating it much from here on (20/08/26)
 
-GitHub Pages is NOT a version of the programm, it is a hosted version of a digest output that updates on intervals at certain times of the day, hosted mainly so I can access the digest on my phone if my laptop isn't available. It does not take into account seen articles and does not provide customisation options.
+GitHub Pages is NOT a version of the program, it is a hosted version of a digest output that updates on intervals at certain times of the day, hosted mainly so I can access the digest on my phone if my laptop isn't available. It does not take into account seen articles and does not provide customisation options.
+
+Pages currently updates at 8:15am 12:15pm and 4:15pm BST.
 
 ## Setup
 
