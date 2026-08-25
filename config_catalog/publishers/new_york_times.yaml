@@ -8,7 +8,7 @@
       kind: "feed"
       url: "https://news.google.com/rss/search?q=site%3Anytimes.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
       site_url: "https://www.nytimes.com/"
-      priority_boost: 0.5
+      priority_boost: 0.3
       interests: ["general-news"]
       fetch_article: "auto"
       categories: ["general-news"]
