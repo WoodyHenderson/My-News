@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{{ title }}</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
@@ -48,7 +49,11 @@
 			<p>No articles matched this edition.</p>
 		{% endif %}
 	</main>
-	<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+	<script>
+		if (window.qt) {
+			document.write('<script src="qrc:///qtwebchannel/qwebchannel.js"><\\/script>');
+		}
+	</script>
 	<script src="digest.js" defer></script>
 </body>
 </html>

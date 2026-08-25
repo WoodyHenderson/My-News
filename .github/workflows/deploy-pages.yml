@@ -1,0 +1,57 @@
+name: Deploy GitHub Pages
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "15 6,11,15 * * *" 
+        # Updates at 07:15, 12:15 and 16:15 BST so when I go to work, get lunch and leave.
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+concurrency:
+    group: "pages"
+    cancel-in-progress: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+        - name: Check out repository
+          uses: actions/checkout@v4
+
+        - name: Configure Pages
+          uses: actions/configure-pages@v5
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.12"
+
+        - name: Install My News
+          run: python -m pip install .
+
+        - name: Build static site
+          run:
+            python scripts/build_pages.py
+
+        - name: Upload artifact for deployment
+          uses: actions/upload-pages-artifact@v3
+          with:
+            path: pages-dist
+    
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        
+        steps:
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v4
