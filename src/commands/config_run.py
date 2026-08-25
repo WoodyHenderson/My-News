@@ -3,7 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Callable
 
-from src.commands.config_validation import ConfigValidationError, load_and_validate_config
+from src.commands.config_validation import (
+    CatalogSelection,
+    ConfigValidationError,
+    load_and_validate_config,
+)
 from src.fetch_articles import fetch_articles
 from src.models.article_content import ArticleContent
 from src.normalise import normalise_validate_articles
@@ -55,6 +59,7 @@ def run_application(
     max_articles_override: int | None = None,
     provider_pref: list[str] | None = None,
     category_pref: list[str] | None = None,
+    catalog_selection: CatalogSelection = CatalogSelection.CONFIGURED,
 ) -> None:
     """
     Run the application with the specified configuration file and output path.
@@ -75,7 +80,12 @@ def run_application(
 
     try:
         progress("Loading and validating configuration...")
-        config_data = load_and_validate_config(config_path, provider_pref, category_pref)
+        config_data = load_and_validate_config(
+            config_path,
+            provider_pref,
+            category_pref,
+            catalog_selection,
+        )
         progress("Configuration validated successfully", "success")
     except ConfigValidationError as e:
         progress(f"Configuration validation failed: {e}", "error")

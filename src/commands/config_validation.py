@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
@@ -9,6 +10,13 @@ import yaml
 
 class ConfigValidationError(ValueError):
     """Raised when the configuration file is missing or invalid."""
+
+
+class CatalogSelection(StrEnum):
+    """Controls whether catalog entries come from preferences or the full catalog."""
+
+    CONFIGURED = "configured"
+    ALL = "all"
 
 
 def _load_category_interests(catalog_path: Path) -> list[dict[str, Any]]:
@@ -81,6 +89,7 @@ def load_and_validate_config(
     config_path: Path,
     provider_pref: list[str] | None = None,
     category_pref: list[str] | None = None,
+    catalog_selection: CatalogSelection = CatalogSelection.CONFIGURED,
 ) -> dict[str, Any]:
     """Create a config by loading in user preferences and then validate."""
     if not config_path.exists():
@@ -111,12 +120,20 @@ def load_and_validate_config(
             f"Configuration file {config_path} is missing the 'sources' key."
         )
 
+    category_catalog_dir = config_path.parent.parent / "config_catalog" / "categories"
+    provider_catalog_dir = config_path.parent.parent / "config_catalog" / "publishers"
+
+    if catalog_selection is CatalogSelection.ALL:
+        if provider_pref is not None or category_pref is not None:
+            raise ConfigValidationError(
+                "CatalogSelection.ALL cannot be used with explicit provider or category preferences."
+            )
+        provider_pref = sorted(path.stem for path in provider_catalog_dir.glob("*.yaml"))
+        category_pref = sorted(path.stem for path in category_catalog_dir.glob("*.yaml"))
+
     # If category preferences are provided, replace interests with only selected ones.
     # If None, keep the config's existing interests.
     if category_pref is not None:
-        category_catalog_dir = (
-            config_path.parent.parent / "config_catalog" / "categories"
-        )
         selected_interests = []
         for category in category_pref:
             category_key = category.strip()
@@ -138,9 +155,6 @@ def load_and_validate_config(
     # If provider preferences are provided, replace sources with only selected ones.
     # If None, keep the config's existing sources.
     if provider_pref is not None:
-        provider_catalog_dir = (
-            config_path.parent.parent / "config_catalog" / "publishers"
-        )
         selected_sources = []
         for provider in provider_pref:
             provider_key = provider.strip()
