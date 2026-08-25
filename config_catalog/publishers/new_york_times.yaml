@@ -6,7 +6,7 @@
     - id: "home-page"
       name: "Top Stories"
       kind: "feed"
-      url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+      url: "https://news.google.com/rss/search?q=site%3Anytimes.com&hl=en-GB&gl=GB&ceid=GB%3Aen"
       site_url: "https://www.nytimes.com/"
       priority_boost: 0.5
       interests: ["general-news"]
@@ -16,7 +16,7 @@
     - id: "us"
       name: "U.S. News"
       kind: "feed"
-      url: "https://rss.nytimes.com/services/xml/rss/nyt/US.xml"
+      url: "https://news.google.com/rss/search?q=site%3Anytimes.com+US&hl=en-GB&gl=GB&ceid=GB%3Aen"
       site_url: "https://www.nytimes.com/section/us"
       priority_boost: 0.1
       interests: ["general-news"]
@@ -26,7 +26,7 @@
     - id: "world"
       name: "World News"
       kind: "feed"
-      url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+      url: "https://news.google.com/rss/search?q=site%3Anytimes.com+world&hl=en-GB&gl=GB&ceid=GB%3Aen"
       site_url: "https://www.nytimes.com/section/world"
       priority_boost: 0.1
       interests: ["general-news", "world"]
@@ -36,7 +36,7 @@
     - id: "technology"
       name: "Technology"
       kind: "feed"
-      url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml"
+      url: "https://news.google.com/rss/search?q=site%3Anytimes.com+technology&hl=en-GB&gl=GB&ceid=GB%3Aen"
       site_url: "https://www.nytimes.com/section/technology"
       priority_boost: 0.1
       interests: ["general-news", "ai", "gaming"]
@@ -46,7 +46,7 @@
     - id: "business"
       name: "Business"
       kind: "feed"
-      url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml"
+      url: "https://news.google.com/rss/search?q=site%3Anytimes.com+business&hl=en-GB&gl=GB&ceid=GB%3Aen"
       site_url: "https://www.nytimes.com/section/business"
       priority_boost: 0.1
       interests: ["general-news", "business", "finance"]
