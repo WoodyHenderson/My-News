@@ -34,7 +34,8 @@ class ExternalLinkPage(QWebEnginePage):
 class SeenBridge(QObject):
     @pyqtSlot(str, result=bool)
     def markSeen(self, url: str) -> bool:
-        return mark_seen(url)
+        mark_seen(url)
+        return True
 
 class HtmlViewerWindow(QMainWindow):
     """Simple Chromium-backed window for viewing generated digest HTML."""
@@ -49,12 +50,12 @@ class HtmlViewerWindow(QMainWindow):
 
         self.web_view = self._create_web_view()
         self.setCentralWidget(self.web_view)
-        self._load_html()
 
         self.channel = QWebChannel(self.web_view.page())
         self.bridge = SeenBridge()
         self.channel.registerObject("pyBridge", self.bridge)
         self.web_view.page().setWebChannel(self.channel)
+        self._load_html()
 
     def _create_web_view(self) -> QWidget:
         if QWebEngineView is None or QWebEnginePage is None:
