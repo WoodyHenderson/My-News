@@ -173,9 +173,11 @@ def score_articles(
             source = sources_by_id.get(article.source_id, {})
             if article.published_at is not None:
                 age_hours = (now - article.published_at).total_seconds() / 3600
-                lookback_hours = config_data.get("digest", {}).get("lookback_hours", 48)
-                recency = 2.0 * max(0.0, 1.0 - age_hours / lookback_hours)
-                score += recency
+                if age_hours >= 30 * 24:
+                    score = 0.0
+                else:
+                    recency_factor = 0.94 ** (age_hours / 12)
+                    score *= recency_factor
             priority = min(max(source.get("priority_boost", 0.0), 0.0), 1.0) # copilot was smart here and suggested this as a fix for a potential edge case if someone is an idiot
             score += priority
         ranked_articles[url] = RankedArticle(
