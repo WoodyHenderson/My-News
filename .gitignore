@@ -27,6 +27,14 @@ pages-dist/
 # Local planning notes
 /planning/
 
+# Local experiments (keep application tests tracked)
+/tests/dotstrip_test.py
+/tests/feedparser_test.py
+/tests/test_guardian_integration.py
+/tests/test_urllib.py
+/tests/example.xml
+/tests/example2.xml
+
 # OS and editor metadata
 .DS_Store
 ._*
