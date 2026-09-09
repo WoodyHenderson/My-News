@@ -1,11 +1,35 @@
+# Local Python environments and caches
 .venv/
 venv/
 env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
 
-**/__pycache__/
+# Build and coverage artifacts
+/build/
+/dist/
+*.egg-info/
+.coverage
+.coverage.*
+/htmlcov/
+/coverage.xml
 
+# Personal configuration and generated application data
+/config/config.yaml
 seen_articles.db
+seen_articles.db-*
 output/
-.DS_Store
-.vscode/
 pages-dist/
+
+# Local planning notes
+/planning/
+
+# OS and editor metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+.vscode/
