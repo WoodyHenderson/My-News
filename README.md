@@ -24,15 +24,15 @@ python -m pip install -e .
 
 ## Using it
 
-The active configuration lives at `config/config.yaml`. Run `my-news init` to create it from the shared base at `config/default.yaml`; `example.yaml` is a fuller reference configuration.
+I suggest running the default config found at `config/default.yaml` and then opening the GUI using
 
 ```bash
-my-news validate
-my-news run
 my-news opengui
 ```
 
-The digest is written to /output as a .html and then can be viewed either in the in built chromium widget in the GUI, the integrated browser in your IDE if it contains one or simply opening it in your default browser.
+After that you can then use the GUI selector to decide upon which sources and categories you want included in your own digest, these are all stored in `config_catalog/` which I may try and add new sources to occassionally.
+
+The digest is written to `/output` as a .html and then can be viewed either in the in built chromium widget in the GUI, the integrated browser in your IDE if it contains one or simply opening it in your default browser.
 
 ```bash
 my-news run --config example.yaml --output output/my-digest.pdf
@@ -41,10 +41,10 @@ my-news run --config example.yaml --output output/my-digest.html # You can open 
 
 ## Configuration and ranking
 
-The default YAML controls the basic network and digest settings, attempting to handle cases where pages may be unavailable and identifying itself to publishers (if you don't have this frequently publishers will reject your http requests). The config catalog contains the yaml files corresponding to each publisher/category that users can then select between in the GUI. The weighting of these is currently static but will likely become dynamic in the future to allow users to decide how important each of these is to them specifically.
+The default YAML controls the basic network and digest settings, attempting to handle cases where pages may be unavailable and identifying itself to publishers (**if you don't have this frequently publishers will reject your http requests**). The config catalog contains the yaml files corresponding to each publisher/category that users can then select between in the GUI. The weighting of these is currently static but will likely become dynamic in the future to allow users to decide how important each of these is to them.
 
-Articles are scored using a slightly bastardised BM25 algorithm. Matches in titles and article bodies are weighted separately, then source priority and recency are added before the best results are put into the digest. This lets me heavily favour something specific like gaming while only giving something noisy like AI a slight boost. 
+Articles are scored using a slightly bastardised BM25 algorithm. More about the algorithm can be found here `https://en.wikipedia.org/wiki/Okapi_BM25`. Matches in titles and article bodies are weighted separately, then source priority and recency are added before the best results are put into the digest. This lets me heavily favour something specific like gaming while only giving something noisy like AI a slight boost. 
 
 Articles that the user has "Marked as Seen" are populated to a local SQlite3 database instance and then filtered out before ranking happens.
 
-The project currently uses feeds from sources including the BBC, The Guardian, ProPublica, AP and Reuters. Some sources use google news' RSS services as they don't have their own publicly available RSS feeds or require a paid API key for this service. Will continue to try and curate as many sources as I find useful, however, will likely only include mainstream providers.
+The project uses Google News URLs as its standard, you can find the provider name right underneath the article header, clicking these links will simply redirect you from the news.google.com link to the official provider.
